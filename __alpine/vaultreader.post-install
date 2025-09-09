@@ -1,0 +1,10 @@
+#!/usr/bin/env ash
+
+chgrp -R devops /opt/bin
+chmod 775 /opt/bin/vaultreader
+
+touch /var/log/vaultreader.log
+chown root:devops /var/log/vaultreader.log
+chmod 664 /var/log/vaultreader.log
+
+exit 0
