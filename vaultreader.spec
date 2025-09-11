@@ -63,6 +63,7 @@ chmod 664 /var/log/vaultreader.log
 
 
 %changelog
+
 * Fri Jul 25 2025 Binary package builder <builder@famillegratton.net> 1.22.00-1
 - Package version bump (jean-francois@famillegratton.net)
 - Moved to a new logging facility, no more need using root (jean-
