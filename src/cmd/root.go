@@ -5,10 +5,11 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
 	"vaultreader/kv"
 	"vaultreader/types"
+
+	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
@@ -30,7 +31,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("vaultreader version 1.22.00 (2025.07.25)")
+		fmt.Println("vaultreader version 1.22.01 (2025.09.11)")
 	},
 }
 
