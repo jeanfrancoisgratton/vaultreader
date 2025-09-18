@@ -46,6 +46,16 @@ func init() {
 	rootCmd.DisableAutoGenTag = true
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.AddCommand(versionCmd)
+	unseal := unsealCmd()
+
+	// Show only when running as root; otherwise keep it hidden but usable
+	if os.Geteuid() != 0 {
+		unseal.Hidden = true
+	} else {
+		unseal.Hidden = false
+	}
+
+	rootCmd.AddCommand(unseal)
 
 	rootCmd.PersistentFlags().StringVarP(&types.VaultAuthToken, "token", "t", "", "Vault token (or use VAULT_TOKEN)")
 	rootCmd.PersistentFlags().StringVarP(&types.VaultServerAddress, "vaultaddress", "a", types.VaultServerAddress, "Vault server address (or use VAULT_ADDRESS)")
