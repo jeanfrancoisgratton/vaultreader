@@ -1,6 +1,6 @@
 all: 
 	cd ../src
-	CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" . -o ./vaultreader.exe
+	CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -linkmode=internal -buildid=" . -o ./vaultreader.exe
 
 prepare:
 	sudo /opt/bin/install_golang.sh 1.25.3 amd64

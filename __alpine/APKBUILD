@@ -2,7 +2,7 @@
 # Packager: APK/DEB/RPM package builder <builder@famillegratton.net>
 pkgname=vaultreader
 pkgver=1.23.00
-pkgrel=1
+pkgrel=3
 pkgdir=/data/packages
 builddir="$startdir/src/BUILD"
 pkgdesc="Hashicorp Vault client"
@@ -19,7 +19,7 @@ build() {
 	mkdir -p "$builddir" && cd "$builddir"/.. && rm -rf BUILD && cp -R "$startdir"/../src . && mv src BUILD
     cd "$builddir"
     make -f "$startdir"/Makefile prepare
-    CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o "$binaryname".exe .
+    CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -linkmode=internal -buildid=" -o "$binaryname".exe .
 }
 
 package() {
