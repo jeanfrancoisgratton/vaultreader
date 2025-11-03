@@ -31,7 +31,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("vaultreader version 1.22.01 (2025.09.11)")
+		fmt.Println("vaultreader version 1.23.00 (2025.11.02)")
 	},
 }
 
@@ -45,8 +45,10 @@ func Execute() {
 func init() {
 	rootCmd.DisableAutoGenTag = true
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(completionCmd, versionCmd)
+
 	unseal := unsealCmd()
+	rootCmd.AddCommand(unseal)
 
 	// Show only when running as root; otherwise keep it hidden but usable
 	if os.Geteuid() != 0 {
@@ -54,8 +56,6 @@ func init() {
 	} else {
 		unseal.Hidden = false
 	}
-
-	rootCmd.AddCommand(unseal)
 
 	rootCmd.PersistentFlags().StringVarP(&types.VaultAuthToken, "token", "t", "", "Vault token (or use VAULT_TOKEN)")
 	rootCmd.PersistentFlags().StringVarP(&types.VaultServerAddress, "vaultaddress", "a", types.VaultServerAddress, "Vault server address (or use VAULT_ADDRESS)")

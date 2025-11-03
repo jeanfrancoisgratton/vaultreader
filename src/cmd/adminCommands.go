@@ -6,10 +6,19 @@
 package cmd
 
 import (
+	"fmt"
 	"vaultreader/admin"
 
 	"github.com/spf13/cobra"
 )
+
+var adminCmd = &cobra.Command{
+	Use:   "conf",
+	Short: "Configuration (SHOW ALL / ALTER SYSTEM) helpers",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("Valid subcommands are: { list | get | set }")
+	},
+}
 
 func unsealCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -22,4 +31,8 @@ func unsealCmd() *cobra.Command {
 		},
 	}
 	return cmd
+}
+
+func init() {
+	adminCmd.AddCommand(unsealCmd)
 }

@@ -2,8 +2,8 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 1.22.01
-%define _rel 1
+%define _version 1.23.00
+%define _rel 0
 %define _arch x86_64
 %define _binaryname vaultreader
 
@@ -28,8 +28,7 @@ Hashicorp Vault client
 
 %build
 cd %{_sourcedir}/%{_name}-%{_version}/src
-PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -o %{_sourcedir}/%{_binaryname} .
-strip %{_sourcedir}/%{_binaryname}
+PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o %{_sourcedir}/%{_binaryname} .
 
 %clean
 rm -rf $RPM_BUILD_ROOT

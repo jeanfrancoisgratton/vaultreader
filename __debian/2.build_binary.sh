@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PKGDIR="vaultreader-1.22.01-0_amd64"
+PKGDIR="vaultreader-1.23.00-0_amd64"
 
 mkdir -p ${PKGDIR}/opt/bin ${PKGDIR}/DEBIAN
 mkdir -p ${PKGDIR}/opt/bin ${PKGDIR}/DEBIAN
@@ -10,8 +10,7 @@ done
 
 echo "Building binary from source"
 cd ../src
-CGO_ENABLED=0 go build -o ../__debian/${PKGDIR}/opt/bin/vaultreader .
-strip ../__debian/${PKGDIR}/opt/bin/vaultreader
+CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o ../__debian/${PKGDIR}/opt/bin/vaultreader .
 sudo chown 0:0 ../__debian/${PKGDIR}/opt/bin/vaultreader
 
 echo "Binary built. Now packaging..."

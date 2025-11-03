@@ -18,7 +18,7 @@ if [ "$#" -gt 0 ]; then
     OUTPUT=$1
 fi
 
-go build -o $OUTPUT/$FULLNAME .
+go build -trimpath -ldflags="-s -w -buildid=" -o $OUTPUT/$FULLNAME .
 sudo touch /var/log/vaultreader.log
 sudo chmod 664 /var/log/vaultreader.log
 sudo chown 0:devops /var/log/vaultreader.log
