@@ -62,6 +62,9 @@ chmod 664 /var/log/vaultreader.log
 
 
 %changelog
+* Sun Nov 02 2025 Binary package builder <builder@famillegratton.net> 1.23.00-1
+- Fixed branch drift (jean-francois@famillegratton.net)
+
 * Sun Nov 02 2025 Binary package builder <builder@famillegratton.net> 1.23.00-0
 - Now trimming the binary at build stage, code completion, go version bump
   (jean-francois@famillegratton.net)
