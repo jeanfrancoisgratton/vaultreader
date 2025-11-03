@@ -62,6 +62,12 @@ chmod 664 /var/log/vaultreader.log
 
 
 %changelog
+* Sun Nov 02 2025 Binary package builder <builder@famillegratton.net> 1.23.00-0
+- Now trimming the binary at build stage, code completion, go version bump
+  (jean-francois@famillegratton.net)
+- admin stub -- take 2 (jean-francois@famillegratton.net)
+- admin subcommands stub (jean-francois@famillegratton.net)
+
 
 * Fri Jul 25 2025 Binary package builder <builder@famillegratton.net> 1.22.00-1
 - Package version bump (jean-francois@famillegratton.net)
