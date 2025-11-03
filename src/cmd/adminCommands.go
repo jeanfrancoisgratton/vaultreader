@@ -34,5 +34,5 @@ func unsealCmd() *cobra.Command {
 }
 
 func init() {
-	adminCmd.AddCommand(unsealCmd)
+	//adminCmd.AddCommand(unsealCmd)
 }

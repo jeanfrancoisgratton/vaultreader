@@ -47,15 +47,15 @@ func init() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.AddCommand(completionCmd, versionCmd)
 
-	unseal := unsealCmd()
-	rootCmd.AddCommand(unseal)
+	//unseal := unsealCmd()
+	//rootCmd.AddCommand(unseal)
 
 	// Show only when running as root; otherwise keep it hidden but usable
-	if os.Geteuid() != 0 {
-		unseal.Hidden = true
-	} else {
-		unseal.Hidden = false
-	}
+	//if os.Geteuid() != 0 {
+	//	unseal.Hidden = true
+	//} else {
+	//	unseal.Hidden = false
+	//}
 
 	rootCmd.PersistentFlags().StringVarP(&types.VaultAuthToken, "token", "t", "", "Vault token (or use VAULT_TOKEN)")
 	rootCmd.PersistentFlags().StringVarP(&types.VaultServerAddress, "vaultaddress", "a", types.VaultServerAddress, "Vault server address (or use VAULT_ADDRESS)")
