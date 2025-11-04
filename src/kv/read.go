@@ -11,8 +11,12 @@ import (
 	"strings"
 	"vaultreader/logging"
 	"vaultreader/types"
+
+	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
+	hftfx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
 )
 
+// Reads a secret fron the Vault secret path
 func ReadSecrets(path string) int {
 	logging.Debugf("Starting ReadSecrets for path=%s", path)
 

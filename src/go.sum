@@ -46,6 +46,10 @@ github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/jeanfrancoisgratton/customError/v2 v2.3.3 h1:RvpKk/PBcM7SdAM2n3k5mbB0K3Gnw5z9NPJNNaaoKgQ=
 github.com/jeanfrancoisgratton/customError/v2 v2.3.3/go.mod h1:7UPNax/GKqYaJ6KPktQuCGTndySymLDaW8lNotVECmg=
+github.com/jeanfrancoisgratton/customError/v3 v3.0.0 h1:cZp3oioIPuqq+uvMdjgkURoGkFmJp7M8Pdvl/oK7BVo=
+github.com/jeanfrancoisgratton/customError/v3 v3.0.0/go.mod h1:4DojV/C2wDStlOEnWtuNrvLBwkyZ9wGstdq3U+gCJP8=
+github.com/jeanfrancoisgratton/helperFunctions/v3 v3.0.5 h1:h+rsPjJ3wFwAWi0JGN17coZagByxkFwyg5XxrrpVRBc=
+github.com/jeanfrancoisgratton/helperFunctions/v3 v3.0.5/go.mod h1:+fpeDpb/VmphgSxVhOk5Y56bKm/C0ixdUqmie3oRgq4=
 github.com/jwalton/gchalk v1.3.0 h1:uTfAaNexN8r0I9bioRTksuT8VGjrPs9YIXR1PQbtX/Q=
 github.com/jwalton/gchalk v1.3.0/go.mod h1:ytRlj60R9f7r53IAElbpq4lVuPOPNg2J4tJcCxtFqr8=
 github.com/jwalton/go-supportscolor v1.1.0/go.mod h1:hFVUAZV2cWg+WFFC4v8pT2X/S2qUUBYMioBD9AINXGs=

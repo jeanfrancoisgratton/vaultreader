@@ -2,8 +2,8 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 1.23.00
-%define _rel 1
+%define _version 1.30.00
+%define _rel 0
 %define _arch x86_64
 %define _binaryname vaultreader
 
@@ -18,7 +18,7 @@ URL:        https://git.famillegratton.net:3000/devops/vaultreader
 
 Source0:    %{name}-%{_version}.tar.gz
 BuildArchitectures: x86_64
-BuildRequires: gcc
+BuildRequires: go
 
 %description
 Hashicorp Vault client

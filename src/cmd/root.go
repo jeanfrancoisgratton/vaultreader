@@ -6,9 +6,14 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+	"runtime"
 	"vaultreader/kv"
 	"vaultreader/types"
 
+	ce "github.com/jeanfrancoisgratton/customError/v2"
+	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
+	hftfx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +21,16 @@ var rootCmd = &cobra.Command{
 	Use:   "vaultreader [secret path]",
 	Short: "Read-only Vault client for KV v2 secrets",
 	Args:  cobra.ExactArgs(1),
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if types.LogLevel != "none" {
+			if err := hfl.Init(filepath.Join(os.Getenv("HOME"), ".local", "state", "vaultreader.log"),
+				hfl.ParseLevel(types.LogLevel), "USER", false, true); err != nil {
+				cerr := ce.CustomError{Title: "Failed to init logging", Message: err.Error(), Code: 1}
+				fmt.Println(cerr.Error())
+				os.Exit(1)
+			}
+		}
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		exitCode := kv.ReadSecrets(args[0])
 		if !types.Quiet && exitCode != 0 {
@@ -25,13 +40,18 @@ var rootCmd = &cobra.Command{
 		}
 		os.Exit(exitCode)
 	},
+	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+		if types.LogLevel != "none" {
+			hfl.Close()
+		}
+	},
 }
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("vaultreader version 1.23.00 (2025.11.02)")
+		fmt.Println(hftfx.White(fmt.Sprintf("1.30.00-%s (2025.11.04)", runtime.GOARCH)))
 	},
 }
 

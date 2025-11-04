@@ -14,6 +14,9 @@ import (
 	"strings"
 	"vaultreader/logging"
 	"vaultreader/types"
+
+	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
+	hftfx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
 )
 
 func findLatestAvailableVersion(client *api.Client, metaPath string) (int, error) {
