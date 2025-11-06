@@ -1,6 +1,7 @@
 | Release | Date       | Comments                                                                                                               |
 |---------|------------|------------------------------------------------------------------------------------------------------------------------|
-| 1.23.00 | 2025.11.02 | GO version bump<br>tab completion<br>binary trimming at build-stage
+| 1.30.00 | 2025.11.06 | GO version bump<br>Prettyfied output<br>Migrated logging to the helperFunctions package<br>Cleaned Alpine packaging    |
+| 1.23.00 | 2025.11.02 | GO version bump<br>tab completion<br>binary trimming at build-stage                                                    |
 | 1.22.01 | 2025.09.11 | GO version bump                                                                                                        |
 | 1.22.00 | 2025.07.25 | GO version bump<br>Moved logfile to `$HOME/.local/state/vaultreader/`,<br>thus removing the need of running under root |
 | 1.21.00 | 2025.07.01 | More error handling                                                                                                    |

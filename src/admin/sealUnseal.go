@@ -6,7 +6,7 @@
 package admin
 
 import (
-	ce "github.com/jeanfrancoisgratton/customError/v2"
+	ce "github.com/jeanfrancoisgratton/customError/v3"
 )
 
 func UnsealVault() *ce.CustomError {

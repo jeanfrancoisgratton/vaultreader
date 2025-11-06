@@ -7,16 +7,15 @@ package kv
 
 import (
 	"fmt"
-	"github.com/hashicorp/vault/api"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
-	"vaultreader/logging"
 	"vaultreader/types"
 
+	"github.com/hashicorp/vault/api"
+
 	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
-	hftfx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
 )
 
 func findLatestAvailableVersion(client *api.Client, metaPath string) (int, error) {
@@ -54,11 +53,11 @@ func findLatestAvailableVersion(client *api.Client, metaPath string) (int, error
 
 func setGlobals() int {
 	if types.VaultAuthToken == "" {
-		logging.Debugf("No vault auth token were provided at command line")
+		hfl.Debugf("No vault auth token were provided at command line")
 		types.VaultAuthToken = os.Getenv("VAULT_TOKEN")
 	}
 	if types.VaultAuthToken == "" {
-		logging.Infof("$VAULT_TOKEN environment variable not set")
+		hfl.Infof("VAULT_TOKEN environment variable not set")
 		homeDir, err := os.UserHomeDir()
 		if err == nil {
 			data, err := os.ReadFile(homeDir + "/.vault-token")
@@ -68,16 +67,16 @@ func setGlobals() int {
 		}
 	}
 	if types.VaultAuthToken == "" {
-		logging.Errorf("Vault token missing")
+		hfl.Errorf("Vault token missing")
 		return types.ErrNoToken
 	}
 
 	if types.VaultServerAddress == "" {
-		logging.Debugf("No vault server address were provided at command line")
+		hfl.Debugf("No vault server address were provided at command line")
 		types.VaultServerAddress = os.Getenv("VAULT_ADDR")
 	}
 	if types.VaultServerAddress == "" {
-		logging.Errorf("Vault address missing")
+		hfl.Errorf("Vault address missing")
 		return types.ErrNoAddress
 	}
 	return 0

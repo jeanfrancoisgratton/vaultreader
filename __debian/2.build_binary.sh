@@ -16,3 +16,5 @@ sudo chown 0:0 ../__debian/${PKGDIR}/opt/bin/vaultreader
 echo "Binary built. Now packaging..."
 cd ../__debian/
 dpkg-deb -b ${PKGDIR}
+
+

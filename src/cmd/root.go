@@ -11,7 +11,7 @@ import (
 	"vaultreader/kv"
 	"vaultreader/types"
 
-	ce "github.com/jeanfrancoisgratton/customError/v2"
+	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
 	hftfx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
 	"github.com/spf13/cobra"
@@ -26,7 +26,7 @@ var rootCmd = &cobra.Command{
 			if err := hfl.Init(filepath.Join(os.Getenv("HOME"), ".local", "state", "vaultreader.log"),
 				hfl.ParseLevel(types.LogLevel), "USER", false, true); err != nil {
 				cerr := ce.CustomError{Title: "Failed to init logging", Message: err.Error(), Code: 1}
-				fmt.Println(cerr.Error())
+				fmt.Println(hftfx.FatalCollisionGlyph(cerr.Error()))
 				os.Exit(1)
 			}
 		}

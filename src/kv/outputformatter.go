@@ -9,16 +9,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"vaultreader/logging"
 	"vaultreader/types"
+
+	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
 )
 
 func outputData(data map[string]interface{}, suppress bool) int {
 	if types.KVSecretField != "" {
-		logging.Debugf("Reading field: %s", types.KVSecretField)
+		hfl.Debugf("Reading field: %s", types.KVSecretField)
 		val, found := data[types.KVSecretField]
 		if !found {
-			logging.Errorf("Field not found: %s", types.KVSecretField)
+			hfl.Errorf("Field not found: %s", types.KVSecretField)
 			return types.ErrFieldNotFound
 		}
 		if suppress {
@@ -41,7 +42,7 @@ func outputData(data map[string]interface{}, suppress bool) int {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(data); err != nil {
-			logging.Errorf("JSON encoding failed: %v", err)
+			hfl.Errorf("JSON encoding failed: %v", err)
 			return types.ErrExtractData
 		}
 	} else {
