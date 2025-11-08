@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-chgrp -R devops /opt/bin
-chmod 775 /opt/bin/vaultreader
+BIN="/opt/bin/vaultreader"
+LOG="/var/log/vaultreader.log"
 
-touch /var/log/vaultreader.log
-chown root:devops /var/log/vaultreader.log
-chmod 664 /var/log/vaultreader.log
+if [ -f "$BIN" ]; then
+    chgrp vaultreader "$BIN" || :
+    chmod 2755 "$BIN" || :
+fi
+
+touch "$LOG"
+chown root:vaultreader "$LOG" || :
+chmod 0644 "$LOG" || :

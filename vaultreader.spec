@@ -34,13 +34,13 @@ PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if getent group devops > /dev/null; then
+if getent group vaultreader > /dev/null; then
   exit 0
 else
-  if getent group 2500 > /dev/null; then
-    groupadd devops
+  if getent group 3000 > /dev/null; then
+    groupadd vaultreader
   else
-    groupadd -g 2500 devops
+    groupadd -g 3000 vaultreader
   fi
 fi
 
@@ -48,9 +48,18 @@ fi
 install -Dpm 0755 %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
 
 %post
-touch /var/log/vaultreader.log
-chown root:devops /var/log/vaultreader.log
-chmod 664 /var/log/vaultreader.log
+BIN="%{_prefix}/bin/%{_binaryname}"
+LOG="/var/log/%{_name}.log"
+
+if [ -f "$BIN" ]; then
+    chgrp vaultreader "$BIN" || :
+    chmod 2755 "$BIN" || :
+fi
+
+touch "$LOG"
+chown root:vaultreader "$LOG" || :
+chmod 0644 "$LOG" || :
+exit 0
 
 %preun
 

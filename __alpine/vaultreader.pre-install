@@ -1,18 +1,17 @@
 #!/usr/bin/env ash
 
-group_name="devops"
-desired_gid=2500
+# Ensure group 'vread' exists (prefer GID 2500 if free). No user creation.
+set -e
 
-# Check if the group exists
-if grep -q "^devops:" /etc/group; then
-    exit 0
-else
-    # Group doesn't exist, check if desired GID is available
-    if grep -q ":2500:" /etc/group; then
-        addgroup devops
-        exit 0
+group_name="vaultreader"
+desired_gid=3000
+
+if ! getent group "${group_name}" >/dev/null 2>&1; then
+    if getent group "${desired_gid}" >/dev/null 2>&1; then
+        addgroup -S "${group_name}"
     else
-        addgroup -g 2500 devops
+        addgroup -S -g "${desired_gid}" "${group_name}"
     fi
 fi
+
 exit 0

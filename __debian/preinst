@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-if getent group devops > /dev/null; then
+if getent group vaultreader > /dev/null; then
   exit 0
 else
-  if getent group 2500; then
-    groupadd devops
+  if getent group 3000; then
+    groupadd vaultreader
   else
-    groupadd -g 2500 devops
+    groupadd -g 3000 vaultreader
   fi
 fi
