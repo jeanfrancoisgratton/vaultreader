@@ -18,7 +18,6 @@ URL:        https://git.famillegratton.net:3000/devops/vaultreader
 
 Source0:    %{name}-%{_version}.tar.gz
 BuildArchitectures: x86_64
-BuildRequires: golang
 
 %description
 Hashicorp Vault client
@@ -45,7 +44,7 @@ else
 fi
 
 %install
-install -Dpm 2755 -g vaultreader %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
+install -Dpm 2755 %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
 
 %post
 BIN="%{_prefix}/bin/%{_binaryname}"
@@ -58,7 +57,7 @@ install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/%{_binaryname}
+%attr(2755,root,vaultreader) %{_prefix}/bin/%{_binaryname}
 
 
 %changelog
@@ -67,26 +66,6 @@ install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
   (builder@famillegratton.net)
 - Automatic commit of package [vaultreader] release [1.30.00-0].
   (builder@famillegratton.net)
-- Automatic commit of package [vaultreader] release [1.30.00-0].
-  (builder@famillegratton.net)
-- Automatic commit of package [vaultreader] release [1.30.00-0].
-  (builder@famillegratton.net)
-- Fixed debian script (builder@famillegratton.net)
-- other round of buildscript fix (jean-francois@famillegratton.net)
-- build scripts fixes (jean-francois@famillegratton.net)
-- Completed verbosity feature addition (jean-francois@famillegratton.net)
-- Updated packaging scripts to accomodate the new logfile path (jean-
-  francois@famillegratton.net)
-- migrated my helper and error packages to v3 (jean-
-  francois@famillegratton.net)
-- interim sync (jean-francois@famillegratton.net)
-- post-install script cleanup (jean-francois@famillegratton.net)
-- New way of packaging APK (jean-francois@famillegratton.net)
-- Forgot to comment out dependency (jean-francois@famillegratton.net)
-- Updated link options for Alpine (jean-francois@famillegratton.net)
-- builddedps update (builder@famillegratton.net)
-
-* Mon Nov 10 2025 Binary package builder <builder@famillegratton.net> 1.30.00-0
 - Automatic commit of package [vaultreader] release [1.30.00-0].
   (builder@famillegratton.net)
 - Automatic commit of package [vaultreader] release [1.30.00-0].
