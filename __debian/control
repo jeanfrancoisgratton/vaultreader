@@ -4,5 +4,5 @@ Architecture: amd64
 Maintainer: J.F. Gratton<jean-francois@famillegratton.net>
 Description: Hashicorp Vault secret reader
 Section: CI/CD utils
-Depends: golang
+Build-Depends: golang-any
 
