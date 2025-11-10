@@ -33,7 +33,7 @@ PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
+%install
 if getent group vaultreader > /dev/null; then
   exit 0
 else
@@ -43,8 +43,6 @@ else
     groupadd -g 3000 vaultreader
   fi
 fi
-
-%install
 install -Dpm 2755 -g vaultreader %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
 
 %post
@@ -63,6 +61,8 @@ install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
 
 %changelog
 * Mon Nov 10 2025 Binary package builder <builder@famillegratton.net> 1.30.00-0
+- Automatic commit of package [vaultreader] release [1.30.00-0].
+  (builder@famillegratton.net)
 - Automatic commit of package [vaultreader] release [1.30.00-0].
   (builder@famillegratton.net)
 - Automatic commit of package [vaultreader] release [1.30.00-0].
