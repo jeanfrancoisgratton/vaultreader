@@ -11,19 +11,28 @@ import (
 	"os"
 	"vaultreader/types"
 
+	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
 )
 
-func outputData(data map[string]interface{}, suppress bool) int {
+func outputData(data map[string]interface{}, suppress bool) *ce.CustomError {
 	if types.KVSecretField != "" {
 		hfl.Debugf("Reading field: %s", types.KVSecretField)
 		val, found := data[types.KVSecretField]
 		if !found {
-			hfl.Errorf("Field not found: %s", types.KVSecretField)
-			return types.ErrFieldNotFound
+			title := "ReadSecret error"
+			message := fmt.Sprintf("Field %s not found", types.KVSecretField)
+			code := types.ErrFieldNotFound
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			cerr := ce.CustomError{Title: title, Message: message, Code: code}
+			hfl.Errorf(cerr.ErrorNoColor())
+			return &cerr
 		}
 		if suppress {
-			return 0
+			return nil
 		}
 		if types.OutputFormat == "json" {
 			out := map[string]interface{}{types.KVSecretField: val}
@@ -31,24 +40,31 @@ func outputData(data map[string]interface{}, suppress bool) int {
 		} else {
 			fmt.Printf("%v\n", val)
 		}
-		return 0
+		return nil
 	}
 
 	if suppress {
-		return 0
+		return nil
 	}
 
 	if types.OutputFormat == "json" {
 		enc := json.NewEncoder(os.Stdout)
 		enc.SetIndent("", "  ")
 		if err := enc.Encode(data); err != nil {
-			hfl.Errorf("JSON encoding failed: %v", err)
-			return types.ErrExtractData
+			title := "JSON encoding error"
+			message := err.Error()
+			code := types.ErrExtractData
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			cerr := ce.CustomError{Title: title, Message: message, Code: code}
+			hfl.Errorf(cerr.ErrorNoColor())
+			return &cerr
 		}
 	} else {
 		for k, v := range data {
 			fmt.Printf("%s: %v\n", k, v)
 		}
 	}
-	return 0
+	return nil
 }

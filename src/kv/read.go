@@ -11,16 +11,19 @@ import (
 	"vaultreader/types"
 
 	"github.com/hashicorp/vault/api"
+	ce "github.com/jeanfrancoisgratton/customError/v3"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
 
 	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
 )
 
 // ReadSecrets : Reads a secret fron the Vault secret path
-func ReadSecrets(path string) int {
+// FIXME: split this function is smaller functions
+func ReadSecrets(path string) *ce.CustomError {
 	hfl.Debugf("Starting ReadSecrets for path=%s", path)
 
 	// Check for required globals
-	if err := setGlobals(); err != 0 {
+	if err := setGlobals(); err != nil {
 		return err
 	}
 
@@ -28,34 +31,72 @@ func ReadSecrets(path string) int {
 	cfg := &api.Config{Address: types.VaultServerAddress}
 	client, err := api.NewClient(cfg)
 	if err != nil {
-		hfl.Errorf("Vault client creation failed: %v", err)
-		return types.ErrVaultInit
+		title := "Vault client creation failed"
+		message := err.Error()
+		if !types.Quiet {
+			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+		}
+		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
+		hfl.Errorf(cerr.ErrorNoColor())
+		return &cerr
 	}
 	client.SetToken(types.VaultAuthToken)
 
 	dataPath := fmt.Sprintf("%s/data/%s", strings.Trim(types.KVEngineMountPath, "/"), strings.Trim(path, "/"))
 	metaPath := fmt.Sprintf("%s/metadata/%s", strings.Trim(types.KVEngineMountPath, "/"), strings.Trim(path, "/"))
+	hfl.Debugf("Data path is ", dataPath)
+	hfl.Debugf("Metadata path is ", metaPath)
 
-	// Pre-check if metadata exists
+	// Pre-check metadata
 	_, metaErr := client.Logical().Read(metaPath)
+
 	if metaErr != nil {
+		// vault unavail
 		if strings.Contains(metaErr.Error(), "connection refused") || strings.Contains(metaErr.Error(), "no such host") {
-			hfl.Errorf("Vault service unavailable: %v", metaErr)
-			return types.ErrVaultUnavailable
+			title := "Vault service unavailable"
+			message := metaErr.Error()
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultUnavailable}
+			hfl.Errorf(cerr.ErrorNoColor())
+			return &cerr
 		}
+		// 403 (not authorized)
 		if strings.Contains(metaErr.Error(), "permission denied") || strings.Contains(metaErr.Error(), "unauthorized") {
-			hfl.Errorf("Invalid Vault token or unauthorized: %v", metaErr)
-			return types.ErrVaultInvalidAuth
+			title := "Invalid Vault token or unauthorized"
+			message := metaErr.Error()
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultInvalidAuth}
+			hfl.Errorf(cerr.ErrorNoColor())
+			return &cerr
 		}
+		// vault is sealed
 		if strings.Contains(metaErr.Error(), "server is sealed") {
-			hfl.Errorf("Vault is sealed: %v", metaErr)
-			return types.ErrVaultSealed
+			title := "Vault is sealed"
+			message := metaErr.Error()
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultSealed}
+			hfl.Errorf(cerr.ErrorNoColor())
+			return &cerr
 		}
 
-		hfl.Errorf("Secret path does not exist or metadata read failed: %s", path)
-		return types.ErrInvalidPath
+		// If we're here, this means that either the secret path or metadata do not exist
+		title := "Secret path does not exist or metadata read failed"
+		message := metaErr.Error()
+		if !types.Quiet {
+			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+		}
+		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultSealed}
+		hfl.Errorf(cerr.ErrorNoColor())
+		return &cerr
 	}
 
+	// so, ... we good ?
 	var secret *api.Secret
 
 	if types.KVSecretVersion > 0 {
@@ -71,12 +112,22 @@ func ReadSecrets(path string) int {
 			hfl.Infof("Latest version missing; trying to find fallback version")
 			ver, ferr := findLatestAvailableVersion(client, metaPath)
 			if ferr != nil {
-				hfl.Errorf("Fallback version detection failed: %v", ferr)
-				return types.ErrReadSecret
+				ferr.Code = types.ErrReadSecret
+				if !types.Quiet {
+					fmt.Println(hftx.FatalSkullBonesGlyph(ferr.Error()))
+				}
+				hfl.Errorf(ferr.ErrorNoColor())
+				return ferr
 			}
 			if ver == 0 {
-				hfl.Errorf("All versions destroyed")
-				return types.ErrReadSecret
+				if !types.Quiet {
+					fmt.Println(hftx.FatalSkullBonesGlyph("All the secret's versions were destroyed"))
+				}
+				cerr := ce.CustomError{Title: "ReadSecret failed",
+					Message: "All the secret's versions were destroyed",
+					Code:    types.ErrReadSecret}
+				hfl.Errorf(cerr.ErrorNoColor())
+				return &cerr
 			}
 			hfl.Infof("Using fallback available version %d", ver)
 			secret, err = client.Logical().ReadWithData(dataPath, map[string][]string{
@@ -87,31 +138,69 @@ func ReadSecrets(path string) int {
 
 	if err != nil {
 		if strings.Contains(err.Error(), "connection refused") || strings.Contains(err.Error(), "no such host") {
-			hfl.Errorf("Vault service unavailable: %v", err)
-			return types.ErrVaultUnavailable
+			title := "Vault service unavailable"
+			message := err.Error()
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			err := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultUnavailable}
+			hfl.Errorf(err.ErrorNoColor())
+			return &err
 		}
 		if strings.Contains(err.Error(), "permission denied") || strings.Contains(err.Error(), "unauthorized") {
-			hfl.Errorf("Invalid Vault token or unauthorized: %v", err)
-			return types.ErrVaultInvalidAuth
+			title := "Invalid Vault token or unauthorized"
+			message := err.Error()
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultInvalidAuth}
+			hfl.Errorf(cerr.ErrorNoColor())
+			return &cerr
 		}
 		if strings.Contains(err.Error(), "server is sealed") {
-			hfl.Errorf("Vault is sealed: %v", err)
-			return types.ErrVaultSealed
+			title := "Vault is sealed"
+			message := err.Error()
+			if !types.Quiet {
+				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			}
+			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultSealed}
+			hfl.Errorf(cerr.ErrorNoColor())
+			return &cerr
 		}
-
-		hfl.Errorf("Secret read failed: %v", err)
-		return types.ErrReadSecret
+		title := "ReadSecret failed"
+		message := err.Error()
+		code := types.ErrReadSecret
+		cerr := ce.CustomError{Title: title, Message: message, Code: code}
+		if !types.Quiet {
+			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+		}
+		hfl.Errorf(cerr.ErrorNoColor())
+		return &cerr
 	}
 
 	if secret == nil {
-		hfl.Errorf("Secret read returned nil")
-		return types.ErrReadSecret
+		title := "ReadSecret failed"
+		message := "Secret read returned nil"
+		code := types.ErrReadSecret
+		cerr := ce.CustomError{Title: title, Message: message, Code: code}
+		if !types.Quiet {
+			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+		}
+		hfl.Errorf(cerr.ErrorNoColor())
+		return &cerr
 	}
 
 	data, ok := secret.Data["data"].(map[string]interface{})
 	if !ok {
-		hfl.Errorf("Secret format invalid")
-		return types.ErrExtractData
+		title := "ReadSecret failed"
+		message := "Secret format is invalid"
+		code := types.ErrExtractData
+		cerr := ce.CustomError{Title: title, Message: message, Code: code}
+		if !types.Quiet {
+			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+		}
+		hfl.Errorf(cerr.ErrorNoColor())
+		return &cerr
 	}
 
 	return outputData(data, types.Quiet)

@@ -1,3 +1,4 @@
 - [ ] wrong error message if secret engine path is wrong :<br> it currently displays version missing instead of path not found 
-- [ ] 
-- [ ] 
+- [ ] split kv.ReadSecrets() in smaller functions, maybe in multiple files
+- [ ] split the kv package in a more logical, intuitive way
+- [ ] **Admin commands**]

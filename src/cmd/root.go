@@ -23,8 +23,9 @@ var rootCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		if types.LogLevel != "none" {
-			if err := hfl.Init(filepath.Join(os.Getenv("HOME"), ".local", "state", "vaultreader.log"),
-				hfl.ParseLevel(types.LogLevel), "USER", false, true); err != nil {
+			if err := hfl.InitExtended(filepath.Join("/", "var", "log", "vaultreader.log"),
+				hfl.ParseLevel(types.LogLevel), "", "", true,
+				false, true); err != nil {
 				cerr := ce.CustomError{Title: "Failed to init logging", Message: err.Error(), Code: 1}
 				fmt.Println(hftfx.FatalCollisionGlyph(cerr.Error()))
 				os.Exit(1)
@@ -32,18 +33,22 @@ var rootCmd = &cobra.Command{
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		exitCode := kv.ReadSecrets(args[0])
-		if !types.Quiet && exitCode != 0 {
-			if msg, ok := types.ErrorMessages[exitCode]; ok {
-				fmt.Fprintln(os.Stderr, msg)
+		var xcode = 0
+		if kvreadErr := kv.ReadSecrets(args[0]); kvreadErr != nil {
+			if types.LogLevel != "none" {
+				hfl.Close()
 			}
+			xcode = kvreadErr.Code
 		}
-		os.Exit(exitCode)
-	},
-	PersistentPostRun: func(cmd *cobra.Command, args []string) {
+
+		if !types.Quiet {
+			fmt.Println(hftfx.GreenOkGlyph("vaultreader exited cleanly"))
+		}
+
 		if types.LogLevel != "none" {
 			hfl.Close()
 		}
+		os.Exit(xcode)
 	},
 }
 
@@ -51,7 +56,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftfx.White(fmt.Sprintf("1.30.00-%s (2025.11.04)", runtime.GOARCH)))
+		fmt.Println(hftfx.White(fmt.Sprintf("1.30.00-%s (2025.11.06)", runtime.GOARCH)))
 	},
 }
 
