@@ -18,7 +18,7 @@ URL:        https://git.famillegratton.net:3000/devops/vaultreader
 
 Source0:    %{name}-%{_version}.tar.gz
 BuildArchitectures: x86_64
-BuildRequires: go
+BuildRequires: golang
 
 %description
 Hashicorp Vault client
@@ -63,6 +63,8 @@ install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
 
 %changelog
 * Mon Nov 10 2025 Binary package builder <builder@famillegratton.net> 1.30.00-0
+- Automatic commit of package [vaultreader] release [1.30.00-0].
+  (builder@famillegratton.net)
 - Fixed debian script (builder@famillegratton.net)
 - other round of buildscript fix (jean-francois@famillegratton.net)
 - build scripts fixes (jean-francois@famillegratton.net)
