@@ -2,7 +2,7 @@
 # Packager: APK/DEB/RPM package builder <builder@famillegratton.net>
 pkgname=vaultreader
 pkgver=1.30.00
-pkgrel=5
+pkgrel=0
 pkgdir=/data/packages
 pkgdesc="Hashicorp Vault client"
 url="https://git.famillegratton.net:3000/devops/vaultreader.git"
@@ -39,7 +39,7 @@ build() {
 
 package() {
 	install -d "$pkgdir"/opt/bin
-	install -m2755 "$builddir/$binaryname" "$pkgdir/opt/bin/$binaryname"
+	install "$builddir/$binaryname" "$pkgdir/opt/bin/$binaryname"
 }
 
 

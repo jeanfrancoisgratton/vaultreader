@@ -2,16 +2,9 @@
 
 set -e
 
-BIN="/opt/bin/vaultreader"
-LOG="/var/log/vaultreader.log"
-
-if [ -f "${BIN}" ]; then
-    chgrp vaultreader "${BIN}" || true
-    chmod 2755 "${BIN}" || true
-fi
-
-touch "${LOG}"
-chown root:vaultreader "${LOG}" || true
-chmod 0644 "${LOG}" || true
+touch /var/log/vaultreader.log
+chmod 0644 /var/log/vaultreader.log
+chown root:vaultreader /var/log/vaultreader.log /opt/bin/vaultreader
+chmod 2755 /opt/bin/vaultreader
 
 exit 0
