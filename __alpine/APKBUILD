@@ -39,7 +39,7 @@ build() {
 
 package() {
 	install -d "$pkgdir"/opt/bin
-	install -m755 "$builddir/$binaryname" "$pkgdir/opt/bin/$binaryname"
+	install -m2755 "$builddir/$binaryname" "$pkgdir/opt/bin/$binaryname"
 }
 
 

@@ -6,12 +6,12 @@ BIN="/opt/bin/vaultreader"
 LOG="/var/log/vaultreader.log"
 
 if [ -f "${BIN}" ]; then
-    chgrp vread "${BIN}" || true
+    chgrp vaultreader "${BIN}" || true
     chmod 2755 "${BIN}" || true
 fi
 
 touch "${LOG}"
-chown root:vread "${LOG}" || true
+chown root:vaultreader "${LOG}" || true
 chmod 0644 "${LOG}" || true
 
 exit 0

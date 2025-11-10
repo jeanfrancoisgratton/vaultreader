@@ -45,21 +45,12 @@ else
 fi
 
 %install
-install -Dpm 0755 %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
+install -Dpm 2755 -g vaultreader %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
 
 %post
 BIN="%{_prefix}/bin/%{_binaryname}"
 LOG="/var/log/%{_name}.log"
-
-if [ -f "$BIN" ]; then
-    chgrp vaultreader "$BIN" || :
-    chmod 2755 "$BIN" || :
-fi
-
-touch "$LOG"
-chown root:vaultreader "$LOG" || :
-chmod 0644 "$LOG" || :
-exit 0
+install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
 
 %preun
 
