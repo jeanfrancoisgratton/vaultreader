@@ -19,17 +19,17 @@ if [ "$#" -gt 0 ]; then
 fi
 
 go build -trimpath -ldflags="-s -w -buildid=" -o $OUTPUT/$FULLNAME .
-if getent group vaultreader > /dev/null 2>&1; then
-    :  # group exists, nothing to do
-else
-    if getent group 3000 > /dev/null 2>&1; then
-        groupadd vaultreader
-    else
-        groupadd -g 3000 vaultreader
-    fi
+
+# ensure group
+if ! getent group vaultreader >/dev/null 2>&1; then
+  if getent group 3000 >/dev/null 2>&1; then
+    sudo -n groupadd vaultreader || sudo groupadd vaultreader
+  else
+    sudo -n groupadd -g 3000 vaultreader || sudo groupadd -g 3000 vaultreader
+  fi
 fi
 
 sudo touch /var/log/vaultreader.log
 sudo chmod 664 /var/log/vaultreader.log
-sudo chmod 2755 "$OUTPUT/$FULLNAME"
 sudo chown 0:vaultreader /var/log/vaultreader.log "$OUTPUT/$FULLNAME"
+sudo chmod 2755 "$OUTPUT/$FULLNAME"
