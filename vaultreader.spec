@@ -62,6 +62,22 @@ install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
 
 
 %changelog
+* Mon Nov 10 2025 Binary package builder <builder@famillegratton.net> 1.30.00-0
+- Fixed debian script (builder@famillegratton.net)
+- other round of buildscript fix (jean-francois@famillegratton.net)
+- build scripts fixes (jean-francois@famillegratton.net)
+- Completed verbosity feature addition (jean-francois@famillegratton.net)
+- Updated packaging scripts to accomodate the new logfile path (jean-
+  francois@famillegratton.net)
+- migrated my helper and error packages to v3 (jean-
+  francois@famillegratton.net)
+- interim sync (jean-francois@famillegratton.net)
+- post-install script cleanup (jean-francois@famillegratton.net)
+- New way of packaging APK (jean-francois@famillegratton.net)
+- Forgot to comment out dependency (jean-francois@famillegratton.net)
+- Updated link options for Alpine (jean-francois@famillegratton.net)
+- builddedps update (builder@famillegratton.net)
+
 * Sun Nov 02 2025 Binary package builder <builder@famillegratton.net> 1.23.00-1
 - Fixed branch drift (jean-francois@famillegratton.net)
 
