@@ -61,6 +61,10 @@ install -m 0664 -o root -g vaultreader /dev/null "$LOG" || :
 
 
 %changelog
+* Tue Nov 11 2025 Binary package builder <builder@famillegratton.net> 1.40.01-0
+- Fixed wrong logfile perms, fixed wrong newline output in final function call
+  (jean-francois@famillegratton.net)
+
 * Tue Nov 11 2025 Binary package builder <builder@famillegratton.net> 1.40.00-0
 - Fixed error handling and wrong env variable (jean-
   francois@famillegratton.net)
