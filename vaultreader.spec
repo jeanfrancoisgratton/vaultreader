@@ -61,6 +61,11 @@ install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
 
 
 %changelog
+* Tue Nov 11 2025 Binary package builder <builder@famillegratton.net> 1.40.00-0
+- Fixed error handling and wrong env variable (jean-
+  francois@famillegratton.net)
+- Fixes in APK scripts (jean-francois@famillegratton.net)
+
 * Mon Nov 10 2025 Binary package builder <builder@famillegratton.net> 1.30.00-0
 - Automatic commit of package [vaultreader] release [1.30.00-0].
   (builder@famillegratton.net)
