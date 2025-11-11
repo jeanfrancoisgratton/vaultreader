@@ -5,7 +5,7 @@ go 1.25.4
 require (
 	github.com/hashicorp/vault/api v1.22.0
 	github.com/jeanfrancoisgratton/customError/v3 v3.0.0
-	github.com/jeanfrancoisgratton/helperFunctions/v3 v3.0.8
+	github.com/jeanfrancoisgratton/helperFunctions/v3 v3.1.0
 	github.com/spf13/cobra v1.10.1
 )
 

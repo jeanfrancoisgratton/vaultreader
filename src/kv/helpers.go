@@ -58,7 +58,7 @@ func findLatestAvailableVersion(client *api.Client, metaPath string) (int, *ce.C
 }
 
 // setGlobals :
-// Setting the VAULT_TOKEN and VAULT_ADDRESS values, either from the env vars or command-line flags
+// Setting the VAULT_TOKEN and VAULT_ADDR values, either from the env vars or command-line flags
 func setGlobals() *ce.CustomError {
 	// We check if we have a valid token value, if not we exit
 	if types.VaultAuthToken == "" {
@@ -83,7 +83,7 @@ func setGlobals() *ce.CustomError {
 		message := fmt.Sprintf("Neither the $VAULT_TOKEN variable, the -t flag or the ~%s/.vault-token file were set.",
 			filepath.Base(os.Getenv("HOME")))
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
 		}
 		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
 		hfl.Errorf(cerr.ErrorNoColor())
@@ -93,13 +93,13 @@ func setGlobals() *ce.CustomError {
 	// in an environment variable or with the -a flag
 	if types.VaultServerAddress == "" {
 		hfl.Infof("No vault address was provided at command line")
-		types.VaultServerAddress = os.Getenv("VAULT_ADDRESS")
+		types.VaultServerAddress = os.Getenv("VAULT_ADDR")
 	}
 	if types.VaultServerAddress == "" {
 		title := "Vault address is missing"
-		message := "Neither the $VAULT_ADDRESS variable or the -a flag were set"
+		message := "Neither the $VAULT_ADDR variable or the -a flag were set"
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s:\n%s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
 		}
 		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultServerAddressMissing}
 		hfl.Errorf(cerr.ErrorNoColor())

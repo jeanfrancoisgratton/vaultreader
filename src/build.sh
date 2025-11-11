@@ -1,12 +1,25 @@
 #!/usr/bin/env sh
 
-GOROOT=/opt/go
-OUTPUT=/opt/bin
-BINARY=vaultreader
+set -e
 
-# Get git branch's name, replace / with _
 BRANCH=`git rev-parse --abbrev-ref HEAD`
 BRANCH=$(echo "$BRANCH" | tr '/' '_')
+BINARY=vaultreader
+OUTPUT=/opt/bin
+
+# Parse arguments
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -b|--binary)
+            shift
+            BINARY="$1"
+            ;;
+        *)
+            OUTPUT="$1"
+            ;;
+    esac
+    shift
+done
 
 if [ "$BRANCH" = "master" ] || [ "$BRANCH" = "main" ] || [ "$BRANCH" = "develop" ]; then
     FULLNAME="$BINARY"
@@ -14,22 +27,5 @@ else
     FULLNAME="$BINARY-$BRANCH"
 fi
 
-if [ "$#" -gt 0 ]; then
-    OUTPUT=$1
-fi
-
-go build -trimpath -ldflags="-s -w -buildid=" -o $OUTPUT/$FULLNAME .
-
-# ensure group
-if ! getent group vaultreader >/dev/null 2>&1; then
-  if getent group 3000 >/dev/null 2>&1; then
-    sudo -n groupadd vaultreader || sudo groupadd vaultreader
-  else
-    sudo -n groupadd -g 3000 vaultreader || sudo groupadd -g 3000 vaultreader
-  fi
-fi
-
-sudo touch /var/log/vaultreader.log
-sudo chmod 664 /var/log/vaultreader.log
-sudo chown 0:vaultreader /var/log/vaultreader.log "$OUTPUT/$FULLNAME"
-sudo chmod 2755 "$OUTPUT/$FULLNAME"
+echo "Building ${OUTPUT}/${FULLNAME}"
+CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o ${OUTPUT}/${FULLNAME} .

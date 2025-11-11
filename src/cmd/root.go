@@ -35,14 +35,13 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var xcode = 0
 		if kvreadErr := kv.ReadSecrets(args[0]); kvreadErr != nil {
-			if types.LogLevel != "none" {
-				hfl.Close()
-			}
 			xcode = kvreadErr.Code
 		}
 
 		if !types.Quiet {
-			fmt.Println(hftfx.GreenOkGlyph("vaultreader exited cleanly"))
+			if xcode == 0 {
+				fmt.Println(hftfx.GreenOkGlyph("\nVaultreader exited cleanly"))
+			}
 		}
 
 		if types.LogLevel != "none" {
@@ -56,7 +55,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftfx.White(fmt.Sprintf("1.30.00-%s (2025.11.06)", runtime.GOARCH)))
+		fmt.Println(hftfx.White(fmt.Sprintf("1.40.00-%s (2025.11.11)", runtime.GOARCH)))
 	},
 }
 

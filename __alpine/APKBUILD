@@ -1,7 +1,7 @@
 # Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
 # Packager: APK/DEB/RPM package builder <builder@famillegratton.net>
 pkgname=vaultreader
-pkgver=1.30.00
+pkgver=1.40.00
 pkgrel=0
 pkgdir=/data/packages
 pkgdesc="Hashicorp Vault client"

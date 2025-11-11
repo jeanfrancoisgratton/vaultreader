@@ -38,6 +38,8 @@ github.com/jeanfrancoisgratton/customError/v3 v3.0.0 h1:cZp3oioIPuqq+uvMdjgkURoG
 github.com/jeanfrancoisgratton/customError/v3 v3.0.0/go.mod h1:4DojV/C2wDStlOEnWtuNrvLBwkyZ9wGstdq3U+gCJP8=
 github.com/jeanfrancoisgratton/helperFunctions/v3 v3.0.8 h1:giDz/c+p2GPcaao4F0fH0qMZMJp04VlKaG2ZDLoJGqw=
 github.com/jeanfrancoisgratton/helperFunctions/v3 v3.0.8/go.mod h1:+fpeDpb/VmphgSxVhOk5Y56bKm/C0ixdUqmie3oRgq4=
+github.com/jeanfrancoisgratton/helperFunctions/v3 v3.1.0 h1:hiBGDBe3PbRAosbam6s3bS1LtXDAFqYBeluXZ8KUOOc=
+github.com/jeanfrancoisgratton/helperFunctions/v3 v3.1.0/go.mod h1:+fpeDpb/VmphgSxVhOk5Y56bKm/C0ixdUqmie3oRgq4=
 github.com/jwalton/gchalk v1.3.0 h1:uTfAaNexN8r0I9bioRTksuT8VGjrPs9YIXR1PQbtX/Q=
 github.com/jwalton/gchalk v1.3.0/go.mod h1:ytRlj60R9f7r53IAElbpq4lVuPOPNg2J4tJcCxtFqr8=
 github.com/jwalton/go-supportscolor v1.1.0/go.mod h1:hFVUAZV2cWg+WFFC4v8pT2X/S2qUUBYMioBD9AINXGs=
