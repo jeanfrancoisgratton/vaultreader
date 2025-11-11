@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PKGDIR="vaultreader-1.40.00-0_amd64"
+PKGDIR="vaultreader-1.40.01-0_amd64"
 
 mkdir -p ${PKGDIR}/opt/bin ${PKGDIR}/DEBIAN
 mkdir -p ${PKGDIR}/opt/bin ${PKGDIR}/DEBIAN

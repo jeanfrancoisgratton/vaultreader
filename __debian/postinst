@@ -10,4 +10,4 @@ fi
 
 touch "$LOG"
 chown root:vaultreader "$LOG" || :
-chmod 0644 "$LOG" || :
+chmod 0664 "$LOG" || :

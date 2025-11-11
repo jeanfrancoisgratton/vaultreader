@@ -2,7 +2,7 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 1.40.00
+%define _version 1.40.01
 %define _rel 0
 %define _arch x86_64
 %define _binaryname vaultreader
@@ -49,7 +49,7 @@ install -Dpm 2755 %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryn
 %post
 BIN="%{_prefix}/bin/%{_binaryname}"
 LOG="/var/log/%{_name}.log"
-install -m 0644 -o root -g vaultreader /dev/null "$LOG" || :
+install -m 0664 -o root -g vaultreader /dev/null "$LOG" || :
 
 %preun
 
