@@ -1,8 +1,8 @@
 # Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
 # Packager: APK/DEB/RPM package builder <builder@famillegratton.net>
 pkgname=vaultreader
-pkgver=1.40.01
-pkgrel=1
+pkgver=1.40.02
+pkgrel=0
 pkgdir=/data/packages
 pkgdesc="Lightweight Hashicorp Vault readonly client"
 url="https://git.famillegratton.net:3000/devops/vaultreader.git"
