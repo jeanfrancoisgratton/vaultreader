@@ -3,8 +3,8 @@
 # Ensure group 'vread' exists (prefer GID 2500 if free). No user creation.
 set -e
 
-group_name="vaultreader"
-desired_gid=3000
+group_name="devops"
+desired_gid=2500
 
 if ! getent group "${group_name}" >/dev/null 2>&1; then
     if getent group "${desired_gid}" >/dev/null 2>&1; then

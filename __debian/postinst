@@ -4,10 +4,10 @@ BIN="/opt/bin/vaultreader"
 LOG="/var/log/vaultreader.log"
 
 if [ -f "$BIN" ]; then
-    chgrp vaultreader "$BIN" || :
+    chgrp devops "$BIN" || :
     chmod 2755 "$BIN" || :
 fi
 
 touch "$LOG"
-chown root:vaultreader "$LOG" || :
+chown root:devops "$LOG" || :
 chmod 0664 "$LOG" || :

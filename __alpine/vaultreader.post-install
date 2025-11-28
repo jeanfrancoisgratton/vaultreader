@@ -4,7 +4,7 @@ set -e
 
 touch /var/log/vaultreader.log
 chmod 0664 /var/log/vaultreader.log
-chown root:vaultreader /var/log/vaultreader.log /opt/bin/vaultreader
+chown root:devops /var/log/vaultreader.log /opt/bin/vaultreader
 chmod 2755 /opt/bin/vaultreader
 
 exit 0

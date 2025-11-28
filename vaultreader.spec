@@ -2,7 +2,7 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 1.40.02
+%define _version 1.40.03
 %define _rel 0
 %define _arch x86_64
 %define _binaryname vaultreader
@@ -33,13 +33,13 @@ PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if getent group vaultreader > /dev/null; then
+if getent group devops > /dev/null; then
   exit 0
 else
-  if getent group 3000 > /dev/null; then
-    groupadd vaultreader
+  if getent group 2500 > /dev/null; then
+    groupadd devops
   else
-    groupadd -g 3000 vaultreader
+    groupadd -g 2500 devops
   fi
 fi
 
@@ -49,7 +49,7 @@ install -Dpm 2755 %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryn
 %post
 BIN="%{_prefix}/bin/%{_binaryname}"
 LOG="/var/log/%{_name}.log"
-install -m 0664 -o root -g vaultreader /dev/null "$LOG" || :
+install -m 0664 -o root -g devops /dev/null "$LOG" || :
 
 %preun
 
