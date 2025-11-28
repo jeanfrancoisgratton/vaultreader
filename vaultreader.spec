@@ -2,7 +2,7 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 1.40.03
+%define _version 1.40.04
 %define _rel 0
 %define _arch x86_64
 %define _binaryname vaultreader
@@ -61,6 +61,9 @@ install -m 0664 -o root -g devops /dev/null "$LOG" || :
 
 
 %changelog
+* Fri Nov 28 2025 Binary package builder <builder@famillegratton.net> 1.40.04-0
+- Fixed buildscript, removed un-needed dirs (jean-francois@famillegratton.net)
+- Release bump (RPM)
 * Fri Nov 28 2025 Binary package builder <builder@famillegratton.net> 1.40.03-0
 - builddep bump, helperFunctions migration to v4 (jean-
   francois@famillegratton.net)
