@@ -61,6 +61,10 @@ install -m 0664 -o root -g devops /dev/null "$LOG" || :
 
 
 %changelog
+* Fri Nov 28 2025 Binary package builder <builder@famillegratton.net> 1.40.03-0
+- builddep bump, helperFunctions migration to v4 (jean-
+  francois@famillegratton.net)
+
 * Fri Nov 14 2025 Binary package builder <builder@famillegratton.net> 1.40.02-0
 - Fixed final output when o=json (jean-francois@famillegratton.net)
 - fixed typo in APK post-install script (jean-francois@famillegratton.net)
