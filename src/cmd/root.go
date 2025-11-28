@@ -56,7 +56,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftfx.White(fmt.Sprintf("1.40.02-%s (2025.11.14)", runtime.GOARCH)))
+		fmt.Println(hftfx.White(fmt.Sprintf("1.40.04-%s (2025.11.28)", runtime.GOARCH)))
 	},
 }
 
