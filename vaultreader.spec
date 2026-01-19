@@ -61,6 +61,11 @@ install -m 0664 -o root -g devops /dev/null "$LOG" || :
 
 
 %changelog
+* Mon Jan 19 2026 Binary package builder <builder@famillegratton.net> 1.41.00-0
+- Suppresed final exit glyph (jean-francois@famillegratton.net)
+- Made the tool quieter for when running in scripts (jean-
+  francois@famillegratton.net)
+
 * Fri Nov 28 2025 Binary package builder <builder@famillegratton.net> 1.40.04-0
 - Fixed buildscript, removed un-needed dirs (jean-francois@famillegratton.net)
 - Release bump (RPM)
