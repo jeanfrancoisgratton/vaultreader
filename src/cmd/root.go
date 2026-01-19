@@ -38,12 +38,12 @@ var rootCmd = &cobra.Command{
 			xcode = kvreadErr.Code
 		}
 
-		if !types.Quiet && types.OutputFormat != "json " {
-			if xcode == 0 && !types.Quiet {
-				fmt.Println()
-				fmt.Println(hftfx.GreenOkGlyph("Vaultreader exited cleanly"))
-			}
-		}
+		//if !types.Quiet && types.OutputFormat != "json " {
+		//	if xcode == 0 {
+		//		fmt.Println()
+		//		fmt.Println(hftfx.GreenOkGlyph("Vaultreader exited cleanly"))
+		//	}
+		//}
 
 		if types.LogLevel != "none" {
 			hfl.Close()
