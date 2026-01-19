@@ -39,7 +39,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		if !types.Quiet && types.OutputFormat != "json " {
-			if xcode == 0 {
+			if xcode == 0 && !types.Quiet {
 				fmt.Println()
 				fmt.Println(hftfx.GreenOkGlyph("Vaultreader exited cleanly"))
 			}
@@ -56,7 +56,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftfx.White(fmt.Sprintf("1.40.04-%s (2025.11.28)", runtime.GOARCH)))
+		fmt.Println(hftfx.White(fmt.Sprintf("1.41.00-%s (2026.01.19)", runtime.GOARCH)))
 	},
 }
 

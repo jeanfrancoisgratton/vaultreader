@@ -83,7 +83,7 @@ func setGlobals() *ce.CustomError {
 		message := fmt.Sprintf("Neither the $VAULT_TOKEN variable, the -t flag or the ~%s/.vault-token file were set.",
 			filepath.Base(os.Getenv("HOME")))
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 		}
 		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
 		hfl.Errorf(cerr.ErrorNoColor())
@@ -99,7 +99,7 @@ func setGlobals() *ce.CustomError {
 		title := "Vault address is missing"
 		message := "Neither the $VAULT_ADDR variable or the -a flag were set"
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 		}
 		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultServerAddressMissing}
 		hfl.Errorf(cerr.ErrorNoColor())

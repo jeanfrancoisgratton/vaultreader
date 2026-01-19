@@ -25,7 +25,7 @@ func outputData(data map[string]interface{}, suppress bool) *ce.CustomError {
 			message := fmt.Sprintf("Field %s not found", types.KVSecretField)
 			code := types.ErrFieldNotFound
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf(" %s %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + " " + message))
 			}
 			cerr := ce.CustomError{Title: title, Message: message, Code: code}
 			hfl.Errorf(cerr.ErrorNoColor())
@@ -55,7 +55,7 @@ func outputData(data map[string]interface{}, suppress bool) *ce.CustomError {
 			message := err.Error()
 			code := types.ErrExtractData
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf(" %s %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + " " + message))
 			}
 			cerr := ce.CustomError{Title: title, Message: message, Code: code}
 			hfl.Errorf(cerr.ErrorNoColor())

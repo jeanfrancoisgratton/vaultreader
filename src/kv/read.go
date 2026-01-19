@@ -34,7 +34,7 @@ func ReadSecrets(path string) *ce.CustomError {
 		title := "Vault client creation failed"
 		message := err.Error()
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 		}
 		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
 		hfl.Errorf(cerr.ErrorNoColor())
@@ -44,6 +44,8 @@ func ReadSecrets(path string) *ce.CustomError {
 
 	dataPath := fmt.Sprintf("%s/data/%s", strings.Trim(types.KVEngineMountPath, "/"), strings.Trim(path, "/"))
 	metaPath := fmt.Sprintf("%s/metadata/%s", strings.Trim(types.KVEngineMountPath, "/"), strings.Trim(path, "/"))
+
+	// FIXME: following 2 strings do not display right in logs
 	hfl.Debugf("Data path is ", dataPath)
 	hfl.Debugf("Metadata path is ", metaPath)
 
@@ -56,7 +58,7 @@ func ReadSecrets(path string) *ce.CustomError {
 			title := "Vault service unavailable"
 			message := metaErr.Error()
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 			}
 			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultUnavailable}
 			hfl.Errorf(cerr.ErrorNoColor())
@@ -67,7 +69,7 @@ func ReadSecrets(path string) *ce.CustomError {
 			title := "Invalid Vault token or unauthorized"
 			message := metaErr.Error()
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 			}
 			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultInvalidAuth}
 			hfl.Errorf(cerr.ErrorNoColor())
@@ -78,7 +80,7 @@ func ReadSecrets(path string) *ce.CustomError {
 			title := "Vault is sealed"
 			message := metaErr.Error()
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 			}
 			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultSealed}
 			hfl.Errorf(cerr.ErrorNoColor())
@@ -89,7 +91,7 @@ func ReadSecrets(path string) *ce.CustomError {
 		title := "Secret path does not exist or metadata read failed"
 		message := metaErr.Error()
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 		}
 		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultSealed}
 		hfl.Errorf(cerr.ErrorNoColor())
@@ -141,7 +143,7 @@ func ReadSecrets(path string) *ce.CustomError {
 			title := "Vault service unavailable"
 			message := err.Error()
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 			}
 			err := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultUnavailable}
 			hfl.Errorf(err.ErrorNoColor())
@@ -151,7 +153,7 @@ func ReadSecrets(path string) *ce.CustomError {
 			title := "Invalid Vault token or unauthorized"
 			message := err.Error()
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 			}
 			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultInvalidAuth}
 			hfl.Errorf(cerr.ErrorNoColor())
@@ -161,7 +163,7 @@ func ReadSecrets(path string) *ce.CustomError {
 			title := "Vault is sealed"
 			message := err.Error()
 			if !types.Quiet {
-				fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+				fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 			}
 			cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultSealed}
 			hfl.Errorf(cerr.ErrorNoColor())
@@ -172,7 +174,7 @@ func ReadSecrets(path string) *ce.CustomError {
 		code := types.ErrReadSecret
 		cerr := ce.CustomError{Title: title, Message: message, Code: code}
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 		}
 		hfl.Errorf(cerr.ErrorNoColor())
 		return &cerr
@@ -184,7 +186,7 @@ func ReadSecrets(path string) *ce.CustomError {
 		code := types.ErrReadSecret
 		cerr := ce.CustomError{Title: title, Message: message, Code: code}
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 		}
 		hfl.Errorf(cerr.ErrorNoColor())
 		return &cerr
@@ -197,7 +199,7 @@ func ReadSecrets(path string) *ce.CustomError {
 		code := types.ErrExtractData
 		cerr := ce.CustomError{Title: title, Message: message, Code: code}
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(fmt.Sprintf("%s: %s", title, message)))
+			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
 		}
 		hfl.Errorf(cerr.ErrorNoColor())
 		return &cerr
