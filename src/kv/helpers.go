@@ -12,13 +12,13 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
 	"vaultreader/types"
 
 	"github.com/hashicorp/vault/api"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
-	hfl "github.com/jeanfrancoisgratton/helperFunctions/v3/logging"
-	hftx "github.com/jeanfrancoisgratton/helperFunctions/v3/terminalfx"
+	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 )
 
 // findLatestAvailableVersion :
@@ -62,12 +62,10 @@ func findLatestAvailableVersion(client *api.Client, metaPath string) (int, *ce.C
 func setGlobals() *ce.CustomError {
 	// We check if we have a valid token value, if not we exit
 	if types.VaultAuthToken == "" {
-		hfl.Infof("No vault auth token was provided at command line")
 		types.VaultAuthToken = os.Getenv("VAULT_TOKEN")
 	}
 	// the -t flag and VAULT_TOKEN env var are not set, we check if there is a $HOME/.vault-token file
 	if types.VaultAuthToken == "" {
-		hfl.Infof("VAULT_TOKEN environment variable not set")
 		homeDir, err := os.UserHomeDir()
 		if err == nil {
 			data, err := os.ReadFile(filepath.Join(homeDir, ".vault-token"))
@@ -83,27 +81,22 @@ func setGlobals() *ce.CustomError {
 		message := fmt.Sprintf("Neither the $VAULT_TOKEN variable, the -t flag or the ~%s/.vault-token file were set.",
 			filepath.Base(os.Getenv("HOME")))
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
+			fmt.Println(hftx.SkullBonesSign(title + ": " + message))
 		}
-		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
-		hfl.Errorf(cerr.ErrorNoColor())
-		return &cerr
+		return &ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
 	}
 	// ok, so we have a token, let's now check if we have a valid vault server address, be it
 	// in an environment variable or with the -a flag
 	if types.VaultServerAddress == "" {
-		hfl.Infof("No vault address was provided at command line")
 		types.VaultServerAddress = os.Getenv("VAULT_ADDR")
 	}
 	if types.VaultServerAddress == "" {
 		title := "Vault address is missing"
 		message := "Neither the $VAULT_ADDR variable or the -a flag were set"
 		if !types.Quiet {
-			fmt.Println(hftx.FatalSkullBonesGlyph(title + ": " + message))
+			fmt.Println(hftx.SkullBonesSign(title + ": " + message))
 		}
-		cerr := ce.CustomError{Title: title, Message: message, Code: types.ErrVaultServerAddressMissing}
-		hfl.Errorf(cerr.ErrorNoColor())
-		return &cerr
+		return &ce.CustomError{Title: title, Message: message, Code: types.ErrVaultServerAddressMissing}
 	}
 	return nil
 }

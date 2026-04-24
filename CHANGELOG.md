@@ -1,5 +1,7 @@
 | Release | Date        | Comments                                                                                                               |
 |---------|-------------|------------------------------------------------------------------------------------------------------------------------|
+| 2.00.00 | 2026.04.24  | The tool is no longer self-contained, it now calls vaultLib for Vault API calls                                        |
+| 1.41.00 | 2026.01.19  | Output is quieter, usefull for when called from a script                                                               |
 | 1.40.04 | 2025.11.28  | Migrated to helperFunctions/v4                                                                                         |
 | 1.40.02 | 2025.11.14  | Fixed output when -o == json                                                                                           |
 | 1.40.00 | 2025.11.11  | Fixed wrong environment variable name (VAULT_ADDR)<br>Cleaned up error handling (phase I)<br>Build script enhancements |
