@@ -11,25 +11,19 @@ import (
 	"vaultreader/kv"
 	"vaultreader/types"
 
-	hfl "github.com/jeanfrancoisgratton/helperFunctions/v5/logging"
 	hftfx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/spf13/cobra"
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "vaultreader -m KV_engine secret_path -f [field]",
+	Use:   "vaultreader KV_engine secret_path [-f field]",
 	Short: "Read-only Vault client for KV v2 secrets",
-	Args:  cobra.ExactArgs(1),
+	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		var xcode = 0
-		if kvreadErr := kv.ReadSecrets(args[0]); kvreadErr != nil {
-			xcode = kvreadErr.Code
+		if kvreadErr := kv.ReadSecrets(args[0], args[1]); kvreadErr != nil {
+			fmt.Println(hftfx.SkullBonesSign(kvreadErr.Error()))
+			os.Exit(1)
 		}
-
-		if types.LogLevel != "none" {
-			hfl.Close()
-		}
-		os.Exit(xcode)
 	},
 }
 
