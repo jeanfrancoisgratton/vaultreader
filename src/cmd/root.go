@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"strings"
 
 	"vaultreader/kv"
 	"vaultreader/types"
@@ -31,7 +32,8 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftfx.White(fmt.Sprintf("2.00.00-%s (2026.04.25)", runtime.GOARCH)))
+		fmt.Println(hftfx.White(fmt.Sprintf("2.00.00 (2026.04.25), Go version  : " +
+			strings.TrimPrefix(runtime.Version(), "go"))))
 	},
 }
 
