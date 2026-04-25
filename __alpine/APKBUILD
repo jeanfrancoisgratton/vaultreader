@@ -2,7 +2,7 @@
 # Packager: APK/DEB/RPM package builder <builder@famillegratton.net>
 pkgname=vaultreader
 pkgver=2.00.00
-pkgrel=0
+pkgrel=1
 pkgdir=/data/packages
 pkgdesc="Lightweight Hashicorp Vault readonly client"
 url="https://git.famillegratton.net:3000/devops/vaultreader.git"

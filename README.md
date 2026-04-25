@@ -17,20 +17,15 @@ The actual server's address
 ## VAULT_AUTH_TOKEN (`-t $token`)
 The authorization token to be authenticate against the Vault service.
 
-## Mandatory: Secret engine mountpoint (`-m $mount`)
-This is where the KV engine sits in the Vault server
-
 ## Optional: Quiet (`-q`)
 This will suppress the output; useful when the tool is used in a CI/CD toolchain
 
 ## Optional: TEXT or JSON output (`-o {text|json}`)
 If `-q` is invoked this option is ignored. If `-q` is not invoked, the output defaults to `-o text`
 
-## Optional: LogLevel (`-l {DEBUG|INFO|ERROR}`)
-This sets the loglevel. It defaults to `ERROR` . The logfile is `/var/log/vaultreader.log`
 ___
 # How to use:
-Simple: `vaultreader -m $mount [-a vaultserver] [-t auth_token] [-v secret version number] [-f field name] secret_name`
+Simple: `vaultreader KV_ENGINE [-a vaultserver] [-t auth_token] [-v secret version number] [-f field name] secret_path`
 
 - If `-v` is omitted, the latest secret's version will be read
 - if `-f` is omitted, all fields in the secret will be fetched
