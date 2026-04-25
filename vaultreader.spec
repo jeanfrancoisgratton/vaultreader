@@ -61,6 +61,9 @@ install -m 0664 -o root -g devops /dev/null "$LOG" || :
 
 
 %changelog
+* Sat Apr 25 2026 Binary package builder <builder@famillegratton.net> 2.00.00-1
+- release number fix, doc update (jean-francois@famillegratton.net)
+
 * Sat Apr 25 2026 Binary package builder <builder@famillegratton.net> 2.00.00-0
 - Completed the migration to the library (jean-francois@famillegratton.net)
 - removed logging, prepping to use vaultLib (jean-francois@famillegratton.net)
