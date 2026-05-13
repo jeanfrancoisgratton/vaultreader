@@ -2,8 +2,8 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 2.00.00
-%define _rel 1
+%define _version 2.00.01
+%define _rel 0
 %define _arch x86_64
 %define _binaryname vaultreader
 
@@ -26,25 +26,17 @@ Hashicorp Vault client
 %autosetup
 
 %build
-cd %{_sourcedir}/%{_name}-%{_version}/src
-PATH=$PATH:/opt/go/bin CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" -o %{_sourcedir}/%{_binaryname} .
+cd src
+CGO_ENABLED=0 /opt/go/bin/go build -trimpath -ldflags="-s -w -buildid=" -o %{_builddir}/%{name}-%{version}/%{_binaryname} .
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if getent group devops > /dev/null; then
-  exit 0
-else
-  if getent group 2500 > /dev/null; then
-    groupadd devops
-  else
-    groupadd -g 2500 devops
-  fi
-fi
 
 %install
-install -Dpm 2755 %{_sourcedir}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
+rm -rf %{buildroot}
+install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
 
 %post
 BIN="%{_prefix}/bin/%{_binaryname}"

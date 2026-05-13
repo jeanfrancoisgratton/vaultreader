@@ -1,5 +1,6 @@
 | Release | Date        | Comments                                                                                                               |
 |---------|-------------|------------------------------------------------------------------------------------------------------------------------|
+| 2.00.01 | 2026.05.13  | Refactored binary packaging, adding archlinux support                                                                  |
 | 2.00.00 | 2026.04.25  | The tool is no longer self-contained, it now calls vaultLib for Vault API calls                                        |
 | 1.41.00 | 2026.01.19  | Output is quieter, usefull for when called from a script                                                               |
 | 1.40.04 | 2025.11.28  | Migrated to helperFunctions/v4                                                                                         |
