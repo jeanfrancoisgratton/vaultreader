@@ -39,9 +39,6 @@ rm -rf %{buildroot}
 install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_bindir}/%{_binaryname}
 
 %post
-BIN="%{_prefix}/bin/%{_binaryname}"
-LOG="/var/log/%{_name}.log"
-install -m 0664 -o root -g devops /dev/null "$LOG" || :
 
 %preun
 
