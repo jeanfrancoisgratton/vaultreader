@@ -53,6 +53,15 @@ install -m 0664 -o root -g devops /dev/null "$LOG" || :
 
 
 %changelog
+* Wed May 13 2026 Binary package builder <builder@famillegratton.net> 2.00.01-0
+- Removed useless Sprintf() call
+- Removed no-longer needed dependency
+- Commented out removed files
+- further post/pre install scripts refactoring
+- moved redhat support in its own dir, added archlinux support, go upgrade to 1.26.3
+- Merge remote-tracking branch 'refs/remotes/origin/develop' into develop
+- version output fix
+
 * Sat Apr 25 2026 Binary package builder <builder@famillegratton.net> 2.00.00-1
 - release number fix, doc update (jean-francois@famillegratton.net)
 
