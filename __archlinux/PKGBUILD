@@ -3,8 +3,8 @@
 
 pkgname=vaultreader
 pkgver=2.01.00
-pkgrel=1
-pkgdesc="Tool to create the GO software directory structure"
+pkgrel=2
+pkgdesc="Lightweight Hashicorp Vault secret reader"
 arch=('x86_64')
 url="https://git.famillegratton.net:3000/devops/vaultreader.git"
 license=('GPL-2.0-only')
