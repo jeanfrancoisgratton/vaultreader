@@ -2,7 +2,7 @@
 # Packager: Package builder <builder@famillegratton.net>
 
 pkgname=vaultreader
-pkgver=2.00.01
+pkgver=2.01.00
 pkgrel=1
 pkgdesc="Tool to create the GO software directory structure"
 arch=('x86_64')
@@ -38,13 +38,6 @@ build() {
 
 check() {
   cd "${srcdir}/${_builddir}"
-
-  mapfile -t test_dirs < <(
-    find . -type f -name '*.go' \
-      -not -path './assets/skeleton/*' \
-      -printf '%h\n' | sort -u
-  )
-
   go test -modcacherw "${test_dirs[@]}"
 }
 
