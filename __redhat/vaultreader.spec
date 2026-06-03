@@ -64,6 +64,9 @@ fi
 
 
 %changelog
+* Wed Jun 03 2026 Binary package builder <builder@famillegratton.net> 2.01.00-0
+- refreshed code against refactored vaultLib package, go version upgrade
+
 * Wed May 13 2026 Binary package builder <builder@famillegratton.net> 2.00.01-0
 - Removed useless Sprintf() call
 - Removed no-longer needed dependency
