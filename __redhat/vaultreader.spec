@@ -63,6 +63,9 @@ fi
 
 
 %changelog
+* Fri Jun 26 2026 Binary package builder <builder@famillegratton.net> 2.2.0-0
+- fixed Makefile indentation
+
 * Wed Jun 03 2026 Binary package builder <builder@famillegratton.net> 2.01.00-0
 - refreshed code against refactored vaultLib package, go version upgrade
 
