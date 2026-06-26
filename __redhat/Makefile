@@ -13,8 +13,7 @@ NEXUSREPO := dnfLocal
 # Intended workflow: make rpm → make upload → make commitcl
 
 tarball:
-	git -C $(REPOROOT) archive --prefix=$(NAME)-$(VERSION)/ HEAD \
-	  | gzip > $(SOURCES)/$(NAME)-$(VERSION).tar.gz
+	git -C $(REPOROOT) archive --prefix=$(NAME)-$(VERSION)/ HEAD | gzip > $(SOURCES)/$(NAME)-$(VERSION).tar.gz
 
 changelog: tarball
 	$(REPOROOT)/__redhat/updateChangelog.sh
@@ -28,12 +27,11 @@ rpmcl: tarball changelog
 	find $(RPMS) -name '*.rpm' -exec cp {} $(DEST)/ \;
 
 upload:
-	nxtools upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
+	/opt/bin/nxtools upload -r $(NEXUSREPO) $(DEST)/$(NAME)-$(VERSION)-$(RELEASE).x86_64.rpm
 
 commitcl:
-	git add vaultreader.spec
+	git add $(SPEC)
 	git commit -m "chore: update changelog for $(VERSION)-$(RELEASE)"
 
 clean:
-	rm -f  $(SOURCES)/$(NAME)-$(VERSION).tar.gz
-	rm -rf $(HOME)/rpmbuild/BUILD/$(NAME)-$(VERSION)
+	rm -f  $(SOURCES)/$(NAME)-$(VERSION).tar.gz $(HOME)/rpmbuild/BUILD/$(NAME)-$(VERSION)
