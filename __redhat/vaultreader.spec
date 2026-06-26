@@ -2,7 +2,7 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 2.01.00
+%define _version 2.2.0
 %define _rel 0
 %define _arch x86_64
 %define _binaryname vaultreader
@@ -11,13 +11,12 @@ Name:       vaultreader
 Version:    %{_version}
 Release:    %{_rel}
 Summary:    Lightweight Hashicorp Vault secret reader
-
 Group:      CI/CD utils
 License:    GPL2.0
 URL:        https://git.famillegratton.net:3000/devops/vaultreader
-
 Source0:    %{name}-%{_version}.tar.gz
 BuildArchitectures: x86_64
+Requires: bash-completion
 
 %description
 Hashicorp Vault client

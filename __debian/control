@@ -1,8 +1,8 @@
 Package: vaultreader
-Version: 2.01.00-0
+Version: 2.2.0-0
 Architecture: amd64
 Maintainer: J.F. Gratton<jean-francois@famillegratton.net>
 Description: Hashicorp Vault secret reader
 Section: CI/CD utils
 Build-Depends: golang-any
-
+Depends: bash-completion

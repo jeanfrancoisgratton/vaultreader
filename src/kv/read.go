@@ -9,15 +9,15 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"vaultreader/types"
+
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hfjson "github.com/jeanfrancoisgratton/helperFunctions/v5/prettyjson"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	vlr "github.com/jeanfrancoisgratton/vaultLib/kv"
-	"vaultreader/types"
 )
 
 // ReadSecrets : Reads a secret fron the Vault secret path
-// FIXME: split this function is smaller functions
 func ReadSecrets(kvengine, path string) *ce.CustomError {
 	// Check for required globals
 	if err := setGlobals(); err != nil {
