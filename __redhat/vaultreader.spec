@@ -49,6 +49,14 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Sat Aug 01 2026 Binary package builder <builder@famillegratton.net> 2.3.0-1
+- Merge remote-tracking branch 'refs/remotes/origin/develop' into develop
+- packaging revamp, no more hardcoded go path
+- Errors are now sent to stderr instead of stdout
+- buildDeps updates, gover update, APKBUILDER: workflow enhancements
+- chore: update changelog for 2.2.0-0
+- fixed Makefile indentation
+
 * Fri Jun 26 2026 Binary package builder <builder@famillegratton.net> 2.2.0-0
 - fixed Makefile indentation
 
