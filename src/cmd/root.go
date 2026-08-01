@@ -22,8 +22,10 @@ var rootCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		if kvreadErr := kv.ReadSecrets(args[0], args[1]); kvreadErr != nil {
-			fmt.Println(hftfx.SkullBonesSign(kvreadErr.Error()))
-			os.Exit(1)
+			// Die() renders to stderr (colour-stripped when piped, e.g. a Jenkins
+			// $(vaultreader ...) capture) and exits with the error's POSIX code,
+			// so a sealed vault no longer dies silently on stdout with a bare 1.
+			kvreadErr.Die()
 		}
 	},
 }

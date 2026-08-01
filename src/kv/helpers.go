@@ -18,7 +18,6 @@ import (
 	"github.com/hashicorp/vault/api"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
-	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 )
 
 // findLatestAvailableVersion :
@@ -80,9 +79,6 @@ func setGlobals() *ce.CustomError {
 		title := fmt.Sprintf("[%s] Vault token is missing", errInfo.Int2StringCode)
 		message := fmt.Sprintf("Neither the $VAULT_TOKEN variable, the -t flag or the ~%s/.vault-token file were set.",
 			filepath.Base(os.Getenv("HOME")))
-		if !types.Quiet {
-			fmt.Println(hftx.SkullBonesSign(title + ": " + message))
-		}
 		return &ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
 	}
 	// ok, so we have a token, let's now check if we have a valid vault server address, be it
@@ -93,10 +89,35 @@ func setGlobals() *ce.CustomError {
 	if types.VaultServerAddress == "" {
 		title := "Vault address is missing"
 		message := "Neither the $VAULT_ADDR variable or the -a flag were set"
-		if !types.Quiet {
-			fmt.Println(hftx.SkullBonesSign(title + ": " + message))
-		}
 		return &ce.CustomError{Title: title, Message: message, Code: types.ErrVaultServerAddressMissing}
 	}
 	return nil
+}
+
+// classifyReadError maps an error returned by vaultLib's KV read path onto a
+// CustomError carrying the matching vaultreader error code, so that Die() can
+// translate it into a meaningful, POSIX-safe exit status (e.g. a sealed vault
+// exits with ErrVaultSealed rather than an indistinguishable generic 1).
+//
+// vaultLib normalises its failures into recognisable wrapped strings; we match
+// on those. Order matters: the sealed case must be tested before the more
+// general "unavailable" one, since vaultLib reports "sealed or unavailable".
+func classifyReadError(err error) *ce.CustomError {
+	msg := err.Error()
+	var code int
+	switch {
+	case strings.Contains(msg, "sealed"):
+		code = types.ErrVaultSealed
+	case strings.Contains(msg, "unavailable"), strings.Contains(msg, "connection refused"),
+		strings.Contains(msg, "no such host"):
+		code = types.ErrVaultUnavailable
+	case strings.Contains(msg, "unauthorized"), strings.Contains(msg, "invalid Vault token"),
+		strings.Contains(msg, "permission denied"):
+		code = types.ErrVaultInvalidAuth
+	case strings.Contains(msg, "does not exist"):
+		code = types.ErrInvalidPath
+	default:
+		code = types.ErrReadSecret
+	}
+	return &ce.CustomError{Title: types.ErrorMessages[code].Msg, Message: msg, Code: code}
 }

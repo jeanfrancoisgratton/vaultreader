@@ -27,7 +27,7 @@ func ReadSecrets(kvengine, path string) *ce.CustomError {
 	cfg := vlr.Config{Address: types.VaultServerAddress, Token: types.VaultAuthToken, MountPath: kvengine}
 	client, cvlrErr := vlr.NewClient(cfg)
 	if cvlrErr != nil {
-		return &ce.CustomError{Title: "Error creating vault client", Message: cvlrErr.Error()}
+		return &ce.CustomError{Title: "Error creating vault client", Message: cvlrErr.Error(), Code: types.ErrVaultInit}
 	}
 
 	// -f is empty, this means we grab the whole secret
@@ -45,16 +45,16 @@ func allSecrets(c *vlr.Client, kvengine, path string) *ce.CustomError {
 
 	if secret, sErr = c.ReadSecret(path,
 		vlr.ReadOptions{Version: types.KVSecretVersion, FallbackToLatestAvailable: true}); sErr != nil {
-		return &ce.CustomError{Title: "Error reading secret", Message: sErr.Error()}
+		return classifyReadError(sErr)
 	}
 
 	if types.OutputFormat == "json" {
 		payload, err := json.MarshalIndent(secret.Data, "", "  ")
 		if err != nil {
-			return &ce.CustomError{Title: "Error serializing secret", Message: err.Error()}
+			return &ce.CustomError{Title: "Error serializing secret", Message: err.Error(), Code: types.ErrExtractData}
 		}
 		if e := hfjson.Print(payload); e != nil {
-			return &ce.CustomError{Title: "Unable to render secret's payload", Message: e.Error()}
+			return &ce.CustomError{Title: "Unable to render secret's payload", Message: e.Error(), Code: types.ErrExtractData}
 		}
 		return nil
 	}
@@ -64,7 +64,7 @@ func allSecrets(c *vlr.Client, kvengine, path string) *ce.CustomError {
 func singleFieldFromSecret(c *vlr.Client, path string) *ce.CustomError {
 	value, err := c.ReadSecretField(path, types.KVSecretField, types.KVSecretVersion)
 	if err != nil {
-		return &ce.CustomError{Title: "Error reading secret", Message: err.Error()}
+		return classifyReadError(err)
 	}
 
 	if types.Quiet {

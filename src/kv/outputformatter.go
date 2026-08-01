@@ -13,7 +13,6 @@ import (
 	"vaultreader/types"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
-	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 )
 
 func outputData(data map[string]interface{}, suppress bool) *ce.CustomError {
@@ -22,11 +21,7 @@ func outputData(data map[string]interface{}, suppress bool) *ce.CustomError {
 		if !found {
 			title := "ReadSecret error"
 			message := fmt.Sprintf("Field %s not found", types.KVSecretField)
-			code := types.ErrFieldNotFound
-			if !types.Quiet {
-				fmt.Println(hftx.SkullBonesSign(title + " " + message))
-			}
-			return &ce.CustomError{Title: title, Message: message, Code: code}
+			return &ce.CustomError{Title: title, Message: message, Code: types.ErrFieldNotFound}
 		}
 		if suppress {
 			return nil
@@ -50,11 +45,7 @@ func outputData(data map[string]interface{}, suppress bool) *ce.CustomError {
 		if err := enc.Encode(data); err != nil {
 			title := "JSON encoding error"
 			message := err.Error()
-			code := types.ErrExtractData
-			if !types.Quiet {
-				fmt.Println(hftx.SkullBonesSign(title + " " + message))
-			}
-			return &ce.CustomError{Title: title, Message: message, Code: code}
+			return &ce.CustomError{Title: title, Message: message, Code: types.ErrExtractData}
 		}
 	} else {
 		for k, v := range data {
