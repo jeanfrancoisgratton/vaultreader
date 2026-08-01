@@ -1,4 +1,4 @@
-# nxtools — Alpine (APK) packaging
+# vaultreader — Alpine (APK) packaging
 #
 # Recipes:
 #   make build     -> abuild -r  (build the .apk and refresh the local repo index)
