@@ -34,8 +34,6 @@ github.com/hashicorp/vault/api v1.23.0 h1:gXgluBsSECfRWTSW9niY2jwg2e9mMJc4WoHNv4
 github.com/hashicorp/vault/api v1.23.0/go.mod h1:zransKiB9ftp+kgY8ydjnvCU7Wk8i9L0DYWpXeMj9ko=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
-github.com/jeanfrancoisgratton/customError/v3 v3.0.0 h1:cZp3oioIPuqq+uvMdjgkURoGkFmJp7M8Pdvl/oK7BVo=
-github.com/jeanfrancoisgratton/customError/v3 v3.0.0/go.mod h1:4DojV/C2wDStlOEnWtuNrvLBwkyZ9wGstdq3U+gCJP8=
 github.com/jeanfrancoisgratton/customError/v3 v3.1.0 h1:TT8zmnp+Osqa0+nBOPPsb409BEz/ibe6CrbMQbsIico=
 github.com/jeanfrancoisgratton/customError/v3 v3.1.0/go.mod h1:mhmEkOcjw2jPZZ8BzG6lNAysZMcELPSJAMg6VkBbxx4=
 github.com/jeanfrancoisgratton/helperFunctions/v5 v5.3.2 h1:CnPdzi6dkhprI0RJ5ml77a83jJRwxGyqCstckCfmYdc=

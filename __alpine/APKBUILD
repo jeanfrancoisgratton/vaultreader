@@ -1,15 +1,15 @@
 # Maintainer: J.F. Gratton <jean-francois@famillegratton.net>
 # Packager: APK/DEB/RPM package builder <builder@famillegratton.net>
 pkgname=vaultreader
-pkgver=2.2.0
-pkgrel=0
+pkgver=2.3.0
+pkgrel=1
 pkgdir=/data/packages
 pkgdesc="Lightweight Hashicorp Vault readonly client"
 url="https://git.famillegratton.net:3000/devops/vaultreader.git"
 arch=x86_64
 license=GPL2
 options="!check"
-install="$pkgname.pre-deinstall $pkgname.post-install"
+#install="$pkgname.pre-deinstall $pkgname.post-install"
 builddir="$startdir/src/BUILD"
 binaryname=vaultreader
 depends="gcompat bash-completion"

@@ -26,12 +26,21 @@ import (
 func findLatestAvailableVersion(client *api.Client, metaPath string) (int, *ce.CustomError) {
 	meta, err := client.Logical().Read(metaPath)
 	if err != nil || meta == nil {
-		return 0, &ce.CustomError{Title: "Unable to fetch metadata", Message: err.Error()}
+		// meta can be nil with a nil err (path simply has no metadata), so we
+		// must not blindly dereference err here.
+		message := "No metadata found at " + metaPath
+		if err != nil {
+			message = err.Error()
+		}
+		return 0, &ce.CustomError{Title: "Unable to fetch metadata", Message: message, Code: types.ErrReadSecret}
 	}
 
 	rawVersions, ok := meta.Data["versions"].(map[string]interface{})
 	if !ok {
-		return 0, &ce.CustomError{Title: "Version metadata not found", Message: err.Error()}
+		// err is guaranteed nil at this point; the failure is the missing/
+		// malformed "versions" key, not a read error.
+		return 0, &ce.CustomError{Title: "Version metadata not found",
+			Message: "Metadata at " + metaPath + " has no usable \"versions\" map", Code: types.ErrExtractData}
 	}
 
 	var available []int

@@ -1,5 +1,6 @@
 | Release | Date        | Comments                                                                                                                   |
 |---------|-------------|----------------------------------------------------------------------------------------------------------------------------|
+| 2.3.0   | 2026.08.01  | Updated customError package ensures that vaultreader sends errors to stderr now                                            |
 | 2.2.0   | 2026.06.24  | Naming scheme now aligns with SemVer<br>Fixed post-install missing dependencies                                            |
 | 2.01.00 | 2026.06.03  | GO upgrade -> v1.26.4<br>using the refactored vaultLib package                                                             |
 | 2.00.01 | 2026.05.13  | Refactored binary packaging<br>adding archlinux support<br>removed logging support<br>removed all pre/post install scripts |
