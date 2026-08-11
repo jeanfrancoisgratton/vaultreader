@@ -34,7 +34,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftfx.White("2.3.0 (2026.08.01), Go version  : " + strings.TrimPrefix(runtime.Version(), "go")))
+		fmt.Println(hftfx.White("2.3.1 (2026.08.11), Go version : " + strings.TrimPrefix(runtime.Version(), "go")))
 	},
 }
 
@@ -48,7 +48,7 @@ func Execute() {
 func init() {
 	rootCmd.DisableAutoGenTag = true
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
-	rootCmd.AddCommand(completionCmd, versionCmd)
+	rootCmd.AddCommand(versionCmd)
 
 	rootCmd.PersistentFlags().StringVarP(&types.VaultAuthToken, "token", "t", "", "Vault token (or use VAULT_TOKEN)")
 	rootCmd.PersistentFlags().StringVarP(&types.VaultServerAddress, "vaultaddress", "a", types.VaultServerAddress, "Vault server address (or use VAULT_ADDRESS)")
@@ -57,5 +57,4 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&types.KVSecretField, "field", "f", "", "Specific field to display")
 	rootCmd.PersistentFlags().BoolVarP(&types.Quiet, "quiet", "q", false, "Suppress all stdout output")
 	rootCmd.PersistentFlags().StringVarP(&types.OutputFormat, "output", "o", "text", "Output format: text|json")
-	//rootCmd.MarkPersistentFlagRequired("mount")
 }

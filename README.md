@@ -1,3 +1,5 @@
+# <img src="./images/vaultreader_banner.png" alt="vaultreader banner" height="384" width="768" />
+
 # vaultreader
 ___
 A lightweight Hashicorp Vault secret reader.
@@ -14,8 +16,8 @@ The following environment variables are not a hard requirement in the sense that
 ## VAULT_ADDR (`-a $address`)
 The actual server's address
 
-## VAULT_AUTH_TOKEN (`-t $token`)
-The authorization token to be authenticate against the Vault service.
+## VAULT_TOKEN (`-t $token`)
+The authorization token to be authenticate against the Vault service. If neither the env var nor `-t` is set, `~/.vault-token` is used as a fallback.
 
 ## Optional: Quiet (`-q`)
 This will suppress the output; useful when the tool is used in a CI/CD toolchain
@@ -31,7 +33,8 @@ Simple: `vaultreader KV_ENGINE [-a vaultserver] [-t auth_token] [-v secret versi
 - if `-f` is omitted, all fields in the secret will be fetched
 ___
 # Building the software:
-Whichever method you choose, go must be installed on the build machine (... well of course !). Check the file `go.version`
+Whichever method you choose, go must be installed on the build machine (... well of course !). Check the file `go.version` to see which version to use.
+
 ## From source:
 Again, simple:
 1. `cd $REPODIR/src`
@@ -43,21 +46,8 @@ By default it will compile the tool as `/opt/bin/vaultreader`, unless you over-r
 ## Binary packages
 Assuming you meet each distros' build framework requirements
 
-### Alpine APK:
-1. Run `abuild -r` from the `__alpine/` directory
-2. The resulting .apk package will be located in `/data/packages`
+Regardless of the targeted distro, examine its `__{alpine,archlinux,debian,redhat}/Makefile` and run the appropriate recipe (`make build` or `make release`)
 
-### Debian DEB:
-1. Go into the `__debian` directory and run the first two numbered shell scripts found there.
-2. Once you've copied the resulting .deb package, you can run the last numbered script
-
-### RedHat RPM:
-The `tito` build tools must be installed on the build machine on top of the usual RPM build tools
-
-1. If it is the first time you've built the rpm: `tito init`
-2. `tito tag --keep-version`
-3. `git push --follow-tags`
-4. `tito build --rpm`
-The resulting .rpm package will be found under `/tmp/tito`
+`make release` expects a fully configured `nxtools` app so it can upload to the appropriate *Nexus Repository* Manager server
 
 
