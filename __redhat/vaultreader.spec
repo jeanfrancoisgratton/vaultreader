@@ -49,6 +49,13 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Aug 11 2026 Binary package builder <builder@famillegratton.net> 2.3.1-1
+- doc update
+- removed the dontexec flag
+- chore: update changelog for 2.3.0-2
+- RPMBUILDER: fixed group ownership in specfile
+- DEBBUILDER: Renumbered version
+
 * Tue Aug 11 2026 Binary package builder <builder@famillegratton.net> 2.3.0-2
 - RPMBUILDER: fixed group ownership in specfile
 - DEBBUILDER: Renumbered version
