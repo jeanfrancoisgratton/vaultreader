@@ -49,6 +49,10 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Aug 11 2026 Binary package builder <builder@famillegratton.net> 2.3.0-2
+- RPMBUILDER: fixed group ownership in specfile
+- DEBBUILDER: Renumbered version
+
 * Sat Aug 01 2026 Binary package builder <builder@famillegratton.net> 2.3.0-1
 - Merge remote-tracking branch 'refs/remotes/origin/develop' into develop
 - packaging revamp, no more hardcoded go path
