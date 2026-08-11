@@ -3,7 +3,7 @@
 %define _name vaultreader
 %define _prefix /opt
 %define _version 2.3.0
-%define _rel 1
+%define _rel 2
 %define _arch x86_64
 %define _binaryname vaultreader
 
@@ -45,7 +45,7 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 %files
 %defattr(-,root,root,-)
-%attr(2755,root,vaultreader) %{_prefix}/bin/%{_binaryname}
+%attr(0755,root,root) %{_prefix}/bin/%{_binaryname}
 
 
 %changelog
