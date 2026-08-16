@@ -49,6 +49,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Sun Aug 16 2026 Binary package builder <builder@famillegratton.net> 2.3.1-2
+- RPMBUILDER: record the RPM changelog on develop instead of main
+- dontexec
+- updated doc
+
 * Tue Aug 11 2026 Binary package builder <builder@famillegratton.net> 2.3.1-1
 - doc update
 - removed the dontexec flag
