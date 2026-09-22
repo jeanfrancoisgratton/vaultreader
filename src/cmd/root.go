@@ -30,11 +30,15 @@ var rootCmd = &cobra.Command{
 	},
 }
 
+// buildVersion and buildDate are set via -ldflags -X at package-build time.
+var buildVersion = "dev"
+var buildDate = "unknown"
+
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Shows the software version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(hftfx.White("2.3.1 (2026.08.11), Go version : " + strings.TrimPrefix(runtime.Version(), "go")))
+		fmt.Println(hftfx.White("vaultreader v" + buildVersion + " (" + buildDate + "), Go version = v" + strings.TrimPrefix(runtime.Version(), "go") + " (" + runtime.GOARCH + ")"))
 	},
 }
 
@@ -55,6 +59,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&types.KVEngineMountPath, "mount", "m", "", "KV v2 mount path (required)")
 	rootCmd.PersistentFlags().IntVarP(&types.KVSecretVersion, "version", "v", 0, "Secret version (0 = latest available)")
 	rootCmd.PersistentFlags().StringVarP(&types.KVSecretField, "field", "f", "", "Specific field to display")
+	rootCmd.PersistentFlags().StringVar(&types.SecretOutputFile, "file", "", "Write the secret to FILE (mode 0600) instead of stdout")
 	rootCmd.PersistentFlags().BoolVarP(&types.Quiet, "quiet", "q", false, "Suppress all stdout output")
 	rootCmd.PersistentFlags().StringVarP(&types.OutputFormat, "output", "o", "text", "Output format: text|json")
 }

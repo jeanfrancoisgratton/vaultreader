@@ -1,5 +1,6 @@
 | Release | Date        | Comments                                                                                                                   |
 |---------|-------------|----------------------------------------------------------------------------------------------------------------------------|
+| 2.4.0   | 2026.09.22  | Added `--file` to write a secret straight to a file instead of stdout<br>Packaging modernized: dynamic version numbering, added Windows (.msi) support, added test coverage |
 | 2.3.1   | 2026.08.11  |  Removed shell completion scripts                                                                                          |
 | 2.3.0   | 2026.08.01  | Updated customError package ensures that vaultreader sends errors to stderr now                                            |
 | 2.2.0   | 2026.06.24  | Naming scheme now aligns with SemVer<br>Fixed post-install missing dependencies                                            |

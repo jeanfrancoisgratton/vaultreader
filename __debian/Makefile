@@ -22,6 +22,12 @@ VERSION   := $(shell awk -F': +' '/^Version:/{print $$2}'      $(CONTROL))
 ARCH      := $(shell awk -F': +' '/^Architecture:/{print $$2}' $(CONTROL))
 BINARY    := $(NAME)
 
+# control's Version is "<upstream>-<debian revision>" (e.g. 2.4.0-1); the
+# binary should only ever report the upstream part, independent of this
+# distro's packaging revision.
+UPSTREAM_VERSION := $(shell echo $(VERSION) | sed 's/-[^-]*$$//')
+BUILDDATE         := $(shell date +%Y.%m.%d)
+
 NEXUSREPO := aptLocal
 SRCDIR    := ../src
 STAGING   := $(NAME)-$(VERSION)_$(ARCH)
@@ -32,8 +38,13 @@ DEB       := $(CURDIR)/$(STAGING).deb
 build:
 	rm -rf "$(STAGING)"
 	install -d "$(STAGING)/DEBIAN" "$(STAGING)/opt/bin"
-	cp control preinst prerm postinst postrm "$(STAGING)/DEBIAN/"
-	cd $(SRCDIR) && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid=" \
+	cp control "$(STAGING)/DEBIAN/"
+	# Make aborts this recipe on the first failing line, so both of these
+	# fast-fail the package build; go test exits 0 for packages with no test
+	# files and only fails on an actual test failure.
+	cd $(SRCDIR) && go vet ./...
+	cd $(SRCDIR) && go test ./...
+	cd $(SRCDIR) && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -buildid= -X vaultreader/cmd.buildVersion=$(UPSTREAM_VERSION) -X vaultreader/cmd.buildDate=$(BUILDDATE)" \
 	  -o "$(CURDIR)/$(STAGING)/opt/bin/$(BINARY)" .
 	sudo chown -R 0:0 "$(STAGING)/opt/bin/$(BINARY)"
 	dpkg-deb -b "$(STAGING)" "$(DEB)"

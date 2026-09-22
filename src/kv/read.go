@@ -48,6 +48,14 @@ func allSecrets(c *vlr.Client, kvengine, path string) *ce.CustomError {
 		return classifyReadError(sErr)
 	}
 
+	if types.SecretOutputFile != "" {
+		payload, err := json.MarshalIndent(secret.Data, "", "  ")
+		if err != nil {
+			return &ce.CustomError{Title: "Error serializing secret", Message: err.Error(), Code: types.ErrExtractData}
+		}
+		return writeSecretFile(payload)
+	}
+
 	if types.OutputFormat == "json" {
 		payload, err := json.MarshalIndent(secret.Data, "", "  ")
 		if err != nil {
@@ -65,6 +73,10 @@ func singleFieldFromSecret(c *vlr.Client, path string) *ce.CustomError {
 	value, err := c.ReadSecretField(path, types.KVSecretField, types.KVSecretVersion)
 	if err != nil {
 		return classifyReadError(err)
+	}
+
+	if types.SecretOutputFile != "" {
+		return writeSecretFile([]byte(fmt.Sprintf("%v\n", value)))
 	}
 
 	if types.Quiet {

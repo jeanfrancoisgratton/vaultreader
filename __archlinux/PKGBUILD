@@ -2,9 +2,9 @@
 # Packager: Package builder <builder@famillegratton.net>
 
 pkgname=vaultreader
-pkgver=2.3.1
+pkgver=2.4.0
 pkgrel=1
-pkgdesc="Tool to create the GO software directory structure"
+pkgdesc="Lightweight Hashicorp Vault readonly client"
 arch=('x86_64')
 url="https://git.famillegratton.net:3000/devops/vaultreader.git"
 license=('GPL-2.0-only')
@@ -33,12 +33,18 @@ build() {
   export GOPATH="${srcdir}/gopath"
   export GOMODCACHE="${GOPATH}/pkg/mod"
 
-  go build -trimpath -mod=readonly -modcacherw -ldflags="-s -w -buildid=" -o "${_binaryname}" .
-}
+  # makepkg only runs check() when invoked with --check, which the packaging
+  # Makefile never passes, so vet/test are run inline here instead to
+  # guarantee they always run. makepkg runs build() under bash's default
+  # errexit-on-uncaught-error behavior for the script as a whole, so both of
+  # these fast-fail; go test exits 0 for packages with no test files and
+  # only fails on an actual test failure.
+  go vet -modcacherw ./...
+  go test -modcacherw ./...
 
-check() {
-  cd "${srcdir}/${_builddir}"
-  go test -modcacherw "${test_dirs[@]}"
+  builddate="$(date +%Y.%m.%d)"
+
+  go build -trimpath -mod=readonly -modcacherw -ldflags="-s -w -buildid= -X vaultreader/cmd.buildVersion=${pkgver} -X vaultreader/cmd.buildDate=${builddate}" -o "${_binaryname}" .
 }
 
 package() {

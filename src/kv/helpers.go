@@ -103,6 +103,18 @@ func setGlobals() *ce.CustomError {
 	return nil
 }
 
+// writeSecretFile writes a secret's rendered content to types.SecretOutputFile
+// with owner-only permissions, since the file may contain sensitive material.
+func writeSecretFile(content []byte) *ce.CustomError {
+	if err := os.WriteFile(types.SecretOutputFile, content, 0600); err != nil {
+		return &ce.CustomError{Title: types.ErrorMessages[types.ErrWriteFile].Msg, Message: err.Error(), Code: types.ErrWriteFile}
+	}
+	if !types.Quiet {
+		fmt.Printf("Secret written to %s\n", types.SecretOutputFile)
+	}
+	return nil
+}
+
 // classifyReadError maps an error returned by vaultLib's KV read path onto a
 // CustomError carrying the matching vaultreader error code, so that Die() can
 // translate it into a meaningful, POSIX-safe exit status (e.g. a sealed vault

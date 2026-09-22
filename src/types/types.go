@@ -11,6 +11,7 @@ var (
 	KVEngineMountPath  string
 	KVSecretVersion    int
 	KVSecretField      string
+	SecretOutputFile   string
 	Quiet              bool
 	OutputFormat       string
 	LogLevel           string
@@ -34,6 +35,7 @@ const (
 	ErrVaultUnavailable
 	ErrVaultSealed
 	ErrVaultInvalidAuth
+	ErrWriteFile
 )
 
 // The map format is :
@@ -49,4 +51,5 @@ var ErrorMessages = map[int]ErrorInfoStruct{
 	ErrVaultUnavailable:          {"ERR_VAULTUNAVAILABLE", "Vault server unavailable"},
 	ErrVaultSealed:               {"ERR_VAULTSEALED", "Vault is sealed"},
 	ErrVaultInvalidAuth:          {"ERR_VAULT_INVALIDAUTH", "Vault auth token is invalid"},
+	ErrWriteFile:                 {"ERR_WRITEFILE", "Error writing secret to file"},
 }
