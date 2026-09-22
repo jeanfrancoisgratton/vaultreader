@@ -55,6 +55,13 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Sep 22 2026 Binary package builder <builder@famillegratton.net> 2.4.0-1
+- feature: added the --file flag to write secret in a file;dynamic version numbering
+- chore: update changelog for 2.3.1-2
+- RPMBUILDER: record the RPM changelog on develop instead of main
+- dontexec
+- updated doc
+
 * Sun Aug 16 2026 Binary package builder <builder@famillegratton.net> 2.3.1-2
 - RPMBUILDER: record the RPM changelog on develop instead of main
 - dontexec
