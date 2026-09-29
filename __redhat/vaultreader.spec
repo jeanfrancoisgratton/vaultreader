@@ -3,7 +3,7 @@
 %define _name vaultreader
 %define _prefix /opt
 %define _version 2.4.0
-%define _rel 2
+%define _rel 3
 %define _arch x86_64
 %define _binaryname vaultreader
 
@@ -16,7 +16,6 @@ License:    GPL2.0
 URL:        https://git.famillegratton.net:3000/devops/vaultreader
 Source0:    %{name}-%{_version}.tar.gz
 BuildArchitectures: x86_64
-Requires: bash-completion
 
 %description
 Hashicorp Vault client
