@@ -55,6 +55,11 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Sep 29 2026 Binary package builder <builder@famillegratton.net> 2.4.0-3
+- chore: removed un-needed dependency
+- chore: destination nexus repo change in packaging
+- chore: update changelog for 2.4.0-1
+
 * Tue Sep 29 2026 Binary package builder <builder@famillegratton.net> 2.4.0-2
 - chore: destination nexus repo change in packaging
 - chore: update changelog for 2.4.0-1
