@@ -3,7 +3,7 @@
   "binaryname": "vaultreader",
   "goversion": "1.27.1",
   "versionnumber": "2.4.0",
-  "defaultreleasenumber": "1",
+  "defaultreleasenumber": "2",
   "description": "Lightweight Hashicorp Vault readonly client",
   "maintainer": "J.F. Gratton <jean-francois@famillegratton.net>",
   "packager": "Package builder <builder@famillegratton.net>",

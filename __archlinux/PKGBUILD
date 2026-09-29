@@ -3,7 +3,7 @@
 
 pkgname=vaultreader
 pkgver=2.4.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Lightweight Hashicorp Vault readonly client"
 arch=('x86_64')
 url="https://git.famillegratton.net:3000/devops/vaultreader.git"
