@@ -6,51 +6,16 @@
 package kv
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
-
-	"vaultreader/types"
-
-	ce "github.com/jeanfrancoisgratton/customError/v3"
 )
 
-func outputData(data map[string]interface{}, suppress bool) *ce.CustomError {
-	if types.KVSecretField != "" {
-		val, found := data[types.KVSecretField]
-		if !found {
-			title := "ReadSecret error"
-			message := fmt.Sprintf("Field %s not found", types.KVSecretField)
-			return &ce.CustomError{Title: title, Message: message, Code: types.ErrFieldNotFound}
-		}
-		if suppress {
-			return nil
-		}
-		if types.OutputFormat == "json" {
-			out := map[string]interface{}{types.KVSecretField: val}
-			json.NewEncoder(os.Stdout).Encode(out)
-		} else {
-			fmt.Printf("%v\n", val)
-		}
-		return nil
-	}
-
+// outputData prints a whole secret as "key: value" lines. Single-field reads
+// and JSON output are handled upstream in read.go and never reach here.
+func outputData(data map[string]interface{}, suppress bool) {
 	if suppress {
-		return nil
+		return
 	}
-
-	if types.OutputFormat == "json" {
-		enc := json.NewEncoder(os.Stdout)
-		enc.SetIndent("", "  ")
-		if err := enc.Encode(data); err != nil {
-			title := "JSON encoding error"
-			message := err.Error()
-			return &ce.CustomError{Title: title, Message: message, Code: types.ErrExtractData}
-		}
-	} else {
-		for k, v := range data {
-			fmt.Printf("%s: %v\n", k, v)
-		}
+	for k, v := range data {
+		fmt.Printf("%s: %v\n", k, v)
 	}
-	return nil
 }

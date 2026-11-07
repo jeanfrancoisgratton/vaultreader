@@ -3,7 +3,7 @@
 // Original timestamp: 2025/05/29 16:02
 // Original filename: src/types/types.go
 
-package types
+package kv
 
 var (
 	VaultAuthToken     string

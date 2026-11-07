@@ -2,8 +2,8 @@
 %define _build_id_links none
 %define _name vaultreader
 %define _prefix /opt
-%define _version 2.4.0
-%define _rel 3
+%define _version 2.5.0
+%define _rel 1
 %define _arch x86_64
 %define _binaryname vaultreader
 
@@ -16,6 +16,7 @@ License:    GPL2.0
 URL:        https://git.famillegratton.net:3000/devops/vaultreader
 Source0:    %{name}-%{_version}.tar.gz
 BuildArchitectures: x86_64
+Requires: bash-completion
 
 %description
 Hashicorp Vault client
@@ -54,6 +55,15 @@ install -Dpm 0755 %{_builddir}/%{name}-%{version}/%{_binaryname} %{buildroot}%{_
 
 
 %changelog
+* Tue Sep 29 2026 Binary package builder <builder@famillegratton.net> 2.4.0-3
+- chore: removed un-needed dependency
+- chore: destination nexus repo change in packaging
+- chore: update changelog for 2.4.0-1
+
+* Tue Sep 29 2026 Binary package builder <builder@famillegratton.net> 2.4.0-2
+- chore: destination nexus repo change in packaging
+- chore: update changelog for 2.4.0-1
+
 * Tue Sep 22 2026 Binary package builder <builder@famillegratton.net> 2.4.0-1
 - feature: added the --file flag to write secret in a file;dynamic version numbering
 - chore: update changelog for 2.3.1-2

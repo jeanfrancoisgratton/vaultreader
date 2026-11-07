@@ -9,8 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"vaultreader/types"
 )
 
 // resetGlobals clears the package-level auth/address globals before and
@@ -18,11 +16,11 @@ import (
 // test in this file shares the same package-level state.
 func resetGlobals(t *testing.T) {
 	t.Helper()
-	types.VaultAuthToken = ""
-	types.VaultServerAddress = ""
+	VaultAuthToken = ""
+	VaultServerAddress = ""
 	t.Cleanup(func() {
-		types.VaultAuthToken = ""
-		types.VaultServerAddress = ""
+		VaultAuthToken = ""
+		VaultServerAddress = ""
 	})
 }
 
@@ -30,13 +28,13 @@ func TestSetGlobalsTokenFlagTakesPrecedence(t *testing.T) {
 	resetGlobals(t)
 	t.Setenv("VAULT_TOKEN", "token-from-env")
 	t.Setenv("VAULT_ADDR", "https://from-env:8200")
-	types.VaultAuthToken = "token-from-flag"
+	VaultAuthToken = "token-from-flag"
 
 	if err := setGlobals(); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if types.VaultAuthToken != "token-from-flag" {
-		t.Errorf("got %q, want the flag value to win over $VAULT_TOKEN", types.VaultAuthToken)
+	if VaultAuthToken != "token-from-flag" {
+		t.Errorf("got %q, want the flag value to win over $VAULT_TOKEN", VaultAuthToken)
 	}
 }
 
@@ -48,8 +46,8 @@ func TestSetGlobalsTokenFallsBackToEnv(t *testing.T) {
 	if err := setGlobals(); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if types.VaultAuthToken != "token-from-env" {
-		t.Errorf("got %q, want $VAULT_TOKEN value", types.VaultAuthToken)
+	if VaultAuthToken != "token-from-env" {
+		t.Errorf("got %q, want $VAULT_TOKEN value", VaultAuthToken)
 	}
 }
 
@@ -69,8 +67,8 @@ func TestSetGlobalsTokenFallsBackToFile(t *testing.T) {
 	if err := setGlobals(); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if types.VaultAuthToken != "token-from-file" {
-		t.Errorf("got %q, want trimmed contents of ~/.vault-token", types.VaultAuthToken)
+	if VaultAuthToken != "token-from-file" {
+		t.Errorf("got %q, want trimmed contents of ~/.vault-token", VaultAuthToken)
 	}
 }
 
@@ -83,8 +81,8 @@ func TestSetGlobalsTokenMissing(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected an error when no token source is available, got nil")
 	}
-	if err.Code != types.ErrVaultAuthTokenMissing {
-		t.Errorf("error code = %d, want %d (ErrVaultAuthTokenMissing)", err.Code, types.ErrVaultAuthTokenMissing)
+	if err.Code != ErrVaultAuthTokenMissing {
+		t.Errorf("error code = %d, want %d (ErrVaultAuthTokenMissing)", err.Code, ErrVaultAuthTokenMissing)
 	}
 }
 
@@ -92,13 +90,13 @@ func TestSetGlobalsAddressFlagTakesPrecedence(t *testing.T) {
 	resetGlobals(t)
 	t.Setenv("VAULT_TOKEN", "token-from-env")
 	t.Setenv("VAULT_ADDR", "https://from-env:8200")
-	types.VaultServerAddress = "https://from-flag:8200"
+	VaultServerAddress = "https://from-flag:8200"
 
 	if err := setGlobals(); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if types.VaultServerAddress != "https://from-flag:8200" {
-		t.Errorf("got %q, want the flag value to win over $VAULT_ADDR", types.VaultServerAddress)
+	if VaultServerAddress != "https://from-flag:8200" {
+		t.Errorf("got %q, want the flag value to win over $VAULT_ADDR", VaultServerAddress)
 	}
 }
 
@@ -110,8 +108,8 @@ func TestSetGlobalsAddressFallsBackToEnv(t *testing.T) {
 	if err := setGlobals(); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if types.VaultServerAddress != "https://from-env:8200" {
-		t.Errorf("got %q, want $VAULT_ADDR value", types.VaultServerAddress)
+	if VaultServerAddress != "https://from-env:8200" {
+		t.Errorf("got %q, want $VAULT_ADDR value", VaultServerAddress)
 	}
 }
 
@@ -124,8 +122,8 @@ func TestSetGlobalsAddressMissing(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected an error when neither the flag nor $VAULT_ADDR is set, got nil")
 	}
-	if err.Code != types.ErrVaultServerAddressMissing {
-		t.Errorf("error code = %d, want %d (ErrVaultServerAddressMissing)", err.Code, types.ErrVaultServerAddressMissing)
+	if err.Code != ErrVaultServerAddressMissing {
+		t.Errorf("error code = %d, want %d (ErrVaultServerAddressMissing)", err.Code, ErrVaultServerAddressMissing)
 	}
 }
 
@@ -140,15 +138,17 @@ func TestClassifyReadError(t *testing.T) {
 		errText string
 		want    int
 	}{
-		{"sealed", "vault is sealed or unavailable", types.ErrVaultSealed},
-		{"unavailable", "Vault is unavailable", types.ErrVaultUnavailable},
-		{"connection refused", "dial tcp: connection refused", types.ErrVaultUnavailable},
-		{"no such host", "dial tcp: no such host", types.ErrVaultUnavailable},
-		{"unauthorized", "unauthorized", types.ErrVaultInvalidAuth},
-		{"invalid token", "invalid Vault token", types.ErrVaultInvalidAuth},
-		{"permission denied", "permission denied", types.ErrVaultInvalidAuth},
-		{"missing path", "secret does not exist", types.ErrInvalidPath},
-		{"unrecognized", "something else entirely broke", types.ErrReadSecret},
+		{"sealed", "vault is sealed or unavailable", ErrVaultSealed},
+		{"unavailable", "Vault is unavailable", ErrVaultUnavailable},
+		{"connection refused", "dial tcp: connection refused", ErrVaultUnavailable},
+		{"no such host", "dial tcp: no such host", ErrVaultUnavailable},
+		{"unauthorized", "unauthorized", ErrVaultInvalidAuth},
+		{"invalid token", "invalid Vault token", ErrVaultInvalidAuth},
+		{"permission denied", "permission denied", ErrVaultInvalidAuth},
+		{"missing path", "secret does not exist", ErrInvalidPath},
+		{"missing field", `read secret field failed: field "test_field" not found`, ErrFieldNotFound},
+		{"missing secret", `read secret failed: secret "myfield" was not found or the requested version is deleted`, ErrInvalidPath},
+		{"unrecognized", "something else entirely broke", ErrReadSecret},
 	}
 
 	for _, tc := range cases {
@@ -164,19 +164,19 @@ func TestClassifyReadError(t *testing.T) {
 // TestWriteSecretFile checks that writeSecretFile creates the file with
 // owner-only permissions and the exact content it was given.
 func TestWriteSecretFile(t *testing.T) {
-	old := types.SecretOutputFile
-	t.Cleanup(func() { types.SecretOutputFile = old })
+	old := SecretOutputFile
+	t.Cleanup(func() { SecretOutputFile = old })
 
 	dir := t.TempDir()
-	types.SecretOutputFile = filepath.Join(dir, "secret.txt")
-	types.Quiet = true
-	t.Cleanup(func() { types.Quiet = false })
+	SecretOutputFile = filepath.Join(dir, "secret.txt")
+	Quiet = true
+	t.Cleanup(func() { Quiet = false })
 
 	if err := writeSecretFile([]byte("s3cr3t\n")); err != nil {
 		t.Fatalf("writeSecretFile failed: %v", err)
 	}
 
-	info, statErr := os.Stat(types.SecretOutputFile)
+	info, statErr := os.Stat(SecretOutputFile)
 	if statErr != nil {
 		t.Fatal(statErr)
 	}
@@ -184,7 +184,7 @@ func TestWriteSecretFile(t *testing.T) {
 		t.Errorf("file permissions = %o, want 600", perm)
 	}
 
-	got, readErr := os.ReadFile(types.SecretOutputFile)
+	got, readErr := os.ReadFile(SecretOutputFile)
 	if readErr != nil {
 		t.Fatal(readErr)
 	}
@@ -196,17 +196,17 @@ func TestWriteSecretFile(t *testing.T) {
 // TestWriteSecretFileError checks that an unwritable destination surfaces as
 // ErrWriteFile rather than panicking or being silently swallowed.
 func TestWriteSecretFileError(t *testing.T) {
-	old := types.SecretOutputFile
-	t.Cleanup(func() { types.SecretOutputFile = old })
+	old := SecretOutputFile
+	t.Cleanup(func() { SecretOutputFile = old })
 
 	// The parent directory doesn't exist, so the write must fail.
-	types.SecretOutputFile = filepath.Join(t.TempDir(), "no-such-subdir", "secret.txt")
+	SecretOutputFile = filepath.Join(t.TempDir(), "no-such-subdir", "secret.txt")
 
 	err := writeSecretFile([]byte("s3cr3t"))
 	if err == nil {
 		t.Fatal("expected an error writing to a nonexistent directory, got nil")
 	}
-	if err.Code != types.ErrWriteFile {
-		t.Errorf("error code = %d, want %d (ErrWriteFile)", err.Code, types.ErrWriteFile)
+	if err.Code != ErrWriteFile {
+		t.Errorf("error code = %d, want %d (ErrWriteFile)", err.Code, ErrWriteFile)
 	}
 }

@@ -2,7 +2,7 @@
 // Written by J.F. Gratton <jean-francois@famillegratton.net>
 // Original filename: src/types/types_test.go
 
-package types
+package kv
 
 import (
 	"testing"
