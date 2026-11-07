@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Unreachable single-field and JSON code paths in the whole-secret text formatter
 
+### Changed
+- Minor code refactoring: the data types what were needlessly sitting in their own types/ packages are now part of the kv/ package
+
 ## [2.4.0] - 2026-09-22
 
 ### Added

@@ -9,8 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"vaultreader/types"
-
 	ce "github.com/jeanfrancoisgratton/customError/v3"
 	hfjson "github.com/jeanfrancoisgratton/helperFunctions/v5/prettyjson"
 	hftx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
@@ -24,14 +22,14 @@ func ReadSecrets(kvengine, path string) *ce.CustomError {
 		return err
 	}
 
-	cfg := vlr.Config{Address: types.VaultServerAddress, Token: types.VaultAuthToken, MountPath: kvengine}
+	cfg := vlr.Config{Address: VaultServerAddress, Token: VaultAuthToken, MountPath: kvengine}
 	client, cvlrErr := vlr.NewClient(cfg)
 	if cvlrErr != nil {
-		return &ce.CustomError{Title: "Error creating vault client", Message: cvlrErr.Error(), Code: types.ErrVaultInit}
+		return &ce.CustomError{Title: "Error creating vault client", Message: cvlrErr.Error(), Code: ErrVaultInit}
 	}
 
 	// -f is empty, this means we grab the whole secret
-	if types.KVSecretField == "" {
+	if KVSecretField == "" {
 		return allSecrets(client, kvengine, path)
 	}
 
@@ -44,46 +42,46 @@ func allSecrets(c *vlr.Client, kvengine, path string) *ce.CustomError {
 	var sErr error
 
 	if secret, sErr = c.ReadSecret(path,
-		vlr.ReadOptions{Version: types.KVSecretVersion, FallbackToLatestAvailable: true}); sErr != nil {
+		vlr.ReadOptions{Version: KVSecretVersion, FallbackToLatestAvailable: true}); sErr != nil {
 		return classifyReadError(sErr)
 	}
 
-	if types.SecretOutputFile != "" {
+	if SecretOutputFile != "" {
 		payload, err := json.MarshalIndent(secret.Data, "", "  ")
 		if err != nil {
-			return &ce.CustomError{Title: "Error serializing secret", Message: err.Error(), Code: types.ErrExtractData}
+			return &ce.CustomError{Title: "Error serializing secret", Message: err.Error(), Code: ErrExtractData}
 		}
 		return writeSecretFile(payload)
 	}
 
-	if types.OutputFormat == "json" {
+	if OutputFormat == "json" {
 		payload, err := json.MarshalIndent(secret.Data, "", "  ")
 		if err != nil {
-			return &ce.CustomError{Title: "Error serializing secret", Message: err.Error(), Code: types.ErrExtractData}
+			return &ce.CustomError{Title: "Error serializing secret", Message: err.Error(), Code: ErrExtractData}
 		}
 		if e := hfjson.Print(payload); e != nil {
-			return &ce.CustomError{Title: "Unable to render secret's payload", Message: e.Error(), Code: types.ErrExtractData}
+			return &ce.CustomError{Title: "Unable to render secret's payload", Message: e.Error(), Code: ErrExtractData}
 		}
 		return nil
 	}
-	outputData(secret.Data, types.Quiet)
+	outputData(secret.Data, Quiet)
 	return nil
 }
 
 func singleFieldFromSecret(c *vlr.Client, path string) *ce.CustomError {
-	value, err := c.ReadSecretField(path, types.KVSecretField, types.KVSecretVersion)
+	value, err := c.ReadSecretField(path, KVSecretField, KVSecretVersion)
 	if err != nil {
 		return classifyReadError(err)
 	}
 
-	if types.SecretOutputFile != "" {
+	if SecretOutputFile != "" {
 		return writeSecretFile([]byte(fmt.Sprintf("%v\n", value)))
 	}
 
-	if types.Quiet {
+	if Quiet {
 		fmt.Printf("%v\n", value)
 	} else {
-		fmt.Println(types.KVSecretField + " : " + hftx.Green(fmt.Sprintf("%v", value)))
+		fmt.Println(KVSecretField + " : " + hftx.Green(fmt.Sprintf("%v", value)))
 	}
 	return nil
 }

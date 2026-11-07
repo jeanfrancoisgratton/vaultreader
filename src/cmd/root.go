@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"vaultreader/kv"
-	"vaultreader/types"
 
 	hftfx "github.com/jeanfrancoisgratton/helperFunctions/v5/terminalfx"
 	"github.com/spf13/cobra"
@@ -54,12 +53,12 @@ func init() {
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	rootCmd.AddCommand(versionCmd)
 
-	rootCmd.PersistentFlags().StringVarP(&types.VaultAuthToken, "token", "t", "", "Vault token (or use VAULT_TOKEN)")
-	rootCmd.PersistentFlags().StringVarP(&types.VaultServerAddress, "vaultaddress", "a", types.VaultServerAddress, "Vault server address (or use VAULT_ADDRESS)")
-	rootCmd.PersistentFlags().StringVarP(&types.KVEngineMountPath, "mount", "m", "", "KV v2 mount path (required)")
-	rootCmd.PersistentFlags().IntVarP(&types.KVSecretVersion, "version", "v", 0, "Secret version (0 = latest available)")
-	rootCmd.PersistentFlags().StringVarP(&types.KVSecretField, "field", "f", "", "Specific field to display")
-	rootCmd.PersistentFlags().StringVar(&types.SecretOutputFile, "file", "", "Write the secret to FILE (mode 0600) instead of stdout")
-	rootCmd.PersistentFlags().BoolVarP(&types.Quiet, "quiet", "q", false, "Suppress all stdout output")
-	rootCmd.PersistentFlags().StringVarP(&types.OutputFormat, "output", "o", "text", "Output format: text|json")
+	rootCmd.PersistentFlags().StringVarP(&kv.VaultAuthToken, "token", "t", "", "Vault token (or use VAULT_TOKEN)")
+	rootCmd.PersistentFlags().StringVarP(&kv.VaultServerAddress, "vaultaddress", "a", kv.VaultServerAddress, "Vault server address (or use VAULT_ADDRESS)")
+	rootCmd.PersistentFlags().StringVarP(&kv.KVEngineMountPath, "mount", "m", "", "KV v2 mount path (required)")
+	rootCmd.PersistentFlags().IntVarP(&kv.KVSecretVersion, "version", "v", 0, "Secret version (0 = latest available)")
+	rootCmd.PersistentFlags().StringVarP(&kv.KVSecretField, "field", "f", "", "Specific field to display")
+	rootCmd.PersistentFlags().StringVar(&kv.SecretOutputFile, "file", "", "Write the secret to FILE (mode 0600) instead of stdout")
+	rootCmd.PersistentFlags().BoolVarP(&kv.Quiet, "quiet", "q", false, "Suppress all stdout output")
+	rootCmd.PersistentFlags().StringVarP(&kv.OutputFormat, "output", "o", "text", "Output format: text|json")
 }

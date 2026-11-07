@@ -13,8 +13,6 @@ import (
 	"strconv"
 	"strings"
 
-	"vaultreader/types"
-
 	"github.com/hashicorp/vault/api"
 
 	ce "github.com/jeanfrancoisgratton/customError/v3"
@@ -32,7 +30,7 @@ func findLatestAvailableVersion(client *api.Client, metaPath string) (int, *ce.C
 		if err != nil {
 			message = err.Error()
 		}
-		return 0, &ce.CustomError{Title: "Unable to fetch metadata", Message: message, Code: types.ErrReadSecret}
+		return 0, &ce.CustomError{Title: "Unable to fetch metadata", Message: message, Code: ErrReadSecret}
 	}
 
 	rawVersions, ok := meta.Data["versions"].(map[string]interface{})
@@ -40,7 +38,7 @@ func findLatestAvailableVersion(client *api.Client, metaPath string) (int, *ce.C
 		// err is guaranteed nil at this point; the failure is the missing/
 		// malformed "versions" key, not a read error.
 		return 0, &ce.CustomError{Title: "Version metadata not found",
-			Message: "Metadata at " + metaPath + " has no usable \"versions\" map", Code: types.ErrExtractData}
+			Message: "Metadata at " + metaPath + " has no usable \"versions\" map", Code: ErrExtractData}
 	}
 
 	var available []int
@@ -69,48 +67,48 @@ func findLatestAvailableVersion(client *api.Client, metaPath string) (int, *ce.C
 // Setting the VAULT_TOKEN and VAULT_ADDR values, either from the env vars or command-line flags
 func setGlobals() *ce.CustomError {
 	// We check if we have a valid token value, if not we exit
-	if types.VaultAuthToken == "" {
-		types.VaultAuthToken = os.Getenv("VAULT_TOKEN")
+	if VaultAuthToken == "" {
+		VaultAuthToken = os.Getenv("VAULT_TOKEN")
 	}
 	// the -t flag and VAULT_TOKEN env var are not set, we check if there is a $HOME/.vault-token file
-	if types.VaultAuthToken == "" {
+	if VaultAuthToken == "" {
 		homeDir, err := os.UserHomeDir()
 		if err == nil {
 			data, err := os.ReadFile(filepath.Join(homeDir, ".vault-token"))
 			if err == nil {
-				types.VaultAuthToken = strings.TrimSpace(string(data))
+				VaultAuthToken = strings.TrimSpace(string(data))
 			}
 		}
 	}
 	// -t and VAULT_TOKEN are not set, $HOME/.vault-token is missing or empty
-	if types.VaultAuthToken == "" {
-		errInfo := types.ErrorMessages[types.ErrVaultAuthTokenMissing]
+	if VaultAuthToken == "" {
+		errInfo := ErrorMessages[ErrVaultAuthTokenMissing]
 		title := fmt.Sprintf("[%s] Vault token is missing", errInfo.Int2StringCode)
 		message := fmt.Sprintf("Neither the $VAULT_TOKEN variable, the -t flag or the ~%s/.vault-token file were set.",
 			filepath.Base(os.Getenv("HOME")))
-		return &ce.CustomError{Title: title, Message: message, Code: types.ErrVaultAuthTokenMissing}
+		return &ce.CustomError{Title: title, Message: message, Code: ErrVaultAuthTokenMissing}
 	}
 	// ok, so we have a token, let's now check if we have a valid vault server address, be it
 	// in an environment variable or with the -a flag
-	if types.VaultServerAddress == "" {
-		types.VaultServerAddress = os.Getenv("VAULT_ADDR")
+	if VaultServerAddress == "" {
+		VaultServerAddress = os.Getenv("VAULT_ADDR")
 	}
-	if types.VaultServerAddress == "" {
+	if VaultServerAddress == "" {
 		title := "Vault address is missing"
 		message := "Neither the $VAULT_ADDR variable or the -a flag were set"
-		return &ce.CustomError{Title: title, Message: message, Code: types.ErrVaultServerAddressMissing}
+		return &ce.CustomError{Title: title, Message: message, Code: ErrVaultServerAddressMissing}
 	}
 	return nil
 }
 
-// writeSecretFile writes a secret's rendered content to types.SecretOutputFile
+// writeSecretFile writes a secret's rendered content to SecretOutputFile
 // with owner-only permissions, since the file may contain sensitive material.
 func writeSecretFile(content []byte) *ce.CustomError {
-	if err := os.WriteFile(types.SecretOutputFile, content, 0600); err != nil {
-		return &ce.CustomError{Title: types.ErrorMessages[types.ErrWriteFile].Msg, Message: err.Error(), Code: types.ErrWriteFile}
+	if err := os.WriteFile(SecretOutputFile, content, 0600); err != nil {
+		return &ce.CustomError{Title: ErrorMessages[ErrWriteFile].Msg, Message: err.Error(), Code: ErrWriteFile}
 	}
-	if !types.Quiet {
-		fmt.Printf("Secret written to %s\n", types.SecretOutputFile)
+	if !Quiet {
+		fmt.Printf("Secret written to %s\n", SecretOutputFile)
 	}
 	return nil
 }
@@ -128,22 +126,22 @@ func classifyReadError(err error) *ce.CustomError {
 	var code int
 	switch {
 	case strings.Contains(msg, "sealed"):
-		code = types.ErrVaultSealed
+		code = ErrVaultSealed
 	case strings.Contains(msg, "unavailable"), strings.Contains(msg, "connection refused"),
 		strings.Contains(msg, "no such host"):
-		code = types.ErrVaultUnavailable
+		code = ErrVaultUnavailable
 	case strings.Contains(msg, "unauthorized"), strings.Contains(msg, "invalid Vault token"),
 		strings.Contains(msg, "permission denied"):
-		code = types.ErrVaultInvalidAuth
+		code = ErrVaultInvalidAuth
 	case strings.Contains(msg, "does not exist"),
 		strings.Contains(msg, "read secret failed: secret ") && strings.Contains(msg, "was not found"):
-		code = types.ErrInvalidPath
+		code = ErrInvalidPath
 	// Matched on vaultLib's full prefix: a bare "not found" would also catch
 	// "secret ... was not found", which is a path problem, not a field one.
 	case strings.Contains(msg, "read secret field failed: field "):
-		code = types.ErrFieldNotFound
+		code = ErrFieldNotFound
 	default:
-		code = types.ErrReadSecret
+		code = ErrReadSecret
 	}
-	return &ce.CustomError{Title: types.ErrorMessages[code].Msg, Message: msg, Code: code}
+	return &ce.CustomError{Title: ErrorMessages[code].Msg, Message: msg, Code: code}
 }
