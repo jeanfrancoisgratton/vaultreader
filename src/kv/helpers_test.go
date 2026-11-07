@@ -148,6 +148,8 @@ func TestClassifyReadError(t *testing.T) {
 		{"invalid token", "invalid Vault token", types.ErrVaultInvalidAuth},
 		{"permission denied", "permission denied", types.ErrVaultInvalidAuth},
 		{"missing path", "secret does not exist", types.ErrInvalidPath},
+		{"missing field", `read secret field failed: field "test_field" not found`, types.ErrFieldNotFound},
+		{"missing secret", `read secret failed: secret "myfield" was not found or the requested version is deleted`, types.ErrInvalidPath},
 		{"unrecognized", "something else entirely broke", types.ErrReadSecret},
 	}
 

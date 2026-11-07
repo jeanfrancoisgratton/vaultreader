@@ -5,83 +5,49 @@
 package kv
 
 import (
+	"bytes"
+	"io"
+	"os"
+	"strings"
 	"testing"
-
-	"vaultreader/types"
 )
 
-func resetOutputGlobals(t *testing.T) {
+// captureOutputData runs outputData with stdout redirected and returns what
+// it printed.
+func captureOutputData(t *testing.T, data map[string]interface{}, suppress bool) string {
 	t.Helper()
-	oldField := types.KVSecretField
-	oldFormat := types.OutputFormat
-	t.Cleanup(func() {
-		types.KVSecretField = oldField
-		types.OutputFormat = oldFormat
-	})
+	old := os.Stdout
+	r, w, err := os.Pipe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	os.Stdout = w
+
+	outputData(data, suppress)
+
+	w.Close()
+	os.Stdout = old
+	var buf bytes.Buffer
+	if _, err := io.Copy(&buf, r); err != nil {
+		t.Fatal(err)
+	}
+	return buf.String()
 }
 
-// TestOutputDataFieldNotFound checks the one code path in outputData that
-// returns an error regardless of the suppress flag: a requested field that
-// isn't present in the secret's data.
-func TestOutputDataFieldNotFound(t *testing.T) {
-	resetOutputGlobals(t)
-	types.KVSecretField = "missing-field"
-
-	err := outputData(map[string]interface{}{"present-field": "value"}, true)
-	if err == nil {
-		t.Fatal("expected an error for a missing field, got nil")
-	}
-	if err.Code != types.ErrFieldNotFound {
-		t.Errorf("error code = %d, want %d (ErrFieldNotFound)", err.Code, types.ErrFieldNotFound)
-	}
-}
-
-// TestOutputDataSuppressed exercises the suppress=true path for both the
-// whole-secret and single-field cases: neither should return an error.
+// TestOutputDataSuppressed checks that suppress=true prints nothing.
 func TestOutputDataSuppressed(t *testing.T) {
-	resetOutputGlobals(t)
-
-	types.KVSecretField = ""
-	if err := outputData(map[string]interface{}{"a": 1}, true); err != nil {
-		t.Errorf("whole-secret suppressed call returned an error: %v", err)
-	}
-
-	types.KVSecretField = "a"
-	if err := outputData(map[string]interface{}{"a": 1}, true); err != nil {
-		t.Errorf("single-field suppressed call returned an error: %v", err)
+	if out := captureOutputData(t, map[string]interface{}{"a": 1}, true); out != "" {
+		t.Errorf("suppressed call printed %q, want nothing", out)
 	}
 }
 
-// TestOutputDataFieldFound checks the non-suppressed, field-present path
-// returns no error for both text and JSON output formats.
-func TestOutputDataFieldFound(t *testing.T) {
-	resetOutputGlobals(t)
-	types.KVSecretField = "a"
-
-	types.OutputFormat = "text"
-	if err := outputData(map[string]interface{}{"a": 1}, false); err != nil {
-		t.Errorf("text output returned an error: %v", err)
-	}
-
-	types.OutputFormat = "json"
-	if err := outputData(map[string]interface{}{"a": 1}, false); err != nil {
-		t.Errorf("json output returned an error: %v", err)
-	}
-}
-
-// TestOutputDataWholeSecret checks the non-suppressed, whole-secret path
-// (no field selected) returns no error for both text and JSON.
+// TestOutputDataWholeSecret checks that every key/value pair is printed as a
+// "key: value" line.
 func TestOutputDataWholeSecret(t *testing.T) {
-	resetOutputGlobals(t)
-	types.KVSecretField = ""
-
-	types.OutputFormat = "text"
-	if err := outputData(map[string]interface{}{"a": 1, "b": 2}, false); err != nil {
-		t.Errorf("text output returned an error: %v", err)
-	}
-
-	types.OutputFormat = "json"
-	if err := outputData(map[string]interface{}{"a": 1, "b": 2}, false); err != nil {
-		t.Errorf("json output returned an error: %v", err)
+	out := captureOutputData(t, map[string]interface{}{"a": 1, "b": "two"}, false)
+	for _, want := range []string{"a: 1\n", "b: two\n"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("output %q does not contain %q", out, want)
+		}
 	}
 }

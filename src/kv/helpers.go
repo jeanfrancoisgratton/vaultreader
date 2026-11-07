@@ -135,8 +135,13 @@ func classifyReadError(err error) *ce.CustomError {
 	case strings.Contains(msg, "unauthorized"), strings.Contains(msg, "invalid Vault token"),
 		strings.Contains(msg, "permission denied"):
 		code = types.ErrVaultInvalidAuth
-	case strings.Contains(msg, "does not exist"):
+	case strings.Contains(msg, "does not exist"),
+		strings.Contains(msg, "read secret failed: secret ") && strings.Contains(msg, "was not found"):
 		code = types.ErrInvalidPath
+	// Matched on vaultLib's full prefix: a bare "not found" would also catch
+	// "secret ... was not found", which is a path problem, not a field one.
+	case strings.Contains(msg, "read secret field failed: field "):
+		code = types.ErrFieldNotFound
 	default:
 		code = types.ErrReadSecret
 	}

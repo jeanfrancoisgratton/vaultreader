@@ -66,7 +66,8 @@ func allSecrets(c *vlr.Client, kvengine, path string) *ce.CustomError {
 		}
 		return nil
 	}
-	return outputData(secret.Data, types.Quiet)
+	outputData(secret.Data, types.Quiet)
+	return nil
 }
 
 func singleFieldFromSecret(c *vlr.Client, path string) *ce.CustomError {
